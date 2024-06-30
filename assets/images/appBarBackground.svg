@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="375" height="812" viewBox="0 0 375 812">
+  <defs>
+    <clipPath id="clip-SIGN_IN_1">
+      <rect width="375" height="812"/>
+    </clipPath>
+  </defs>
+  <g id="SIGN_IN_1" data-name="SIGN IN – 1" clip-path="url(#clip-SIGN_IN_1)">
+    <rect width="375" height="812" fill="rgba(255,255,255,0)"/>
+    <g id="Group_9672" transform="translate(0 -198)">
+      <g id="Group_9672-2" data-name="Group_9672" transform="translate(-46.099 -22.604)">
+        <g id="Sign_İn" transform="translate(56 274)">
+          <text id="BACK" transform="translate(0 15)" fill="#fff" font-size="14" font-family="SegoeUI-Bold, Segoe UI" font-weight="700"><tspan x="0" y="0">Chatrooms</tspan></text>
+        </g>
+        <g id="Light_Status_Bar" transform="translate(19 212)">
+          <g id="Battery" transform="translate(310)">
+            <g id="Border" transform="translate(0 0.333)">
+              <rect id="Rectangle" width="22" height="11.333" rx="2.667" fill="none"/>
+              <rect id="Rectangle-2" data-name="Rectangle" width="21" height="10.333" rx="2.167" transform="translate(0.5 0.5)" fill="none" stroke="#fff" stroke-miterlimit="10" stroke-width="1"/>
+            </g>
+            <path id="Cap" d="M0,0V4A2.17,2.17,0,0,0,1.328,2,2.17,2.17,0,0,0,0,0" transform="translate(23 4)" fill="#fff"/>
+            <rect id="Capacity" width="18" height="7.333" rx="1.333" transform="translate(2 2.333)" fill="#fff"/>
+          </g>
+          <path id="Wifi" d="M7.637,10.965h0a.315.315,0,0,1-.22-.093l-2-2.016A.312.312,0,0,1,5.427,8.4a3.421,3.421,0,0,1,4.419,0,.316.316,0,0,1,.005.456l-2,2.016A.309.309,0,0,1,7.637,10.965Zm3.507-3.538a.311.311,0,0,1-.213-.086,4.9,4.9,0,0,0-6.584,0,.312.312,0,0,1-.435-.005L2.758,6.169a.322.322,0,0,1,0-.459,7.158,7.158,0,0,1,9.752,0,.32.32,0,0,1,.005.459L11.364,7.336A.309.309,0,0,1,11.145,7.427ZM1.463,4.744a.308.308,0,0,1-.217-.089L.094,3.485A.321.321,0,0,1,0,3.256a.324.324,0,0,1,.094-.228,10.9,10.9,0,0,1,15.08,0,.327.327,0,0,1,.1.228.319.319,0,0,1-.094.229L14.024,4.65a.3.3,0,0,1-.217.091H13.8a.3.3,0,0,1-.214-.086,8.64,8.64,0,0,0-11.907,0A.305.305,0,0,1,1.463,4.744Z" transform="translate(289.693 0.332)" fill="#fff" opacity="0.96"/>
+          <path id="Cellular_Connection" d="M16,10.667H15a1,1,0,0,1-1-1V1a1,1,0,0,1,1-1h1a1,1,0,0,1,1,1V9.667A1,1,0,0,1,16,10.667Zm-4.667,0h-1a1,1,0,0,1-1-1V3.334a1,1,0,0,1,1-1h1a1,1,0,0,1,1,1V9.667A1,1,0,0,1,11.334,10.667Zm-4.667,0h-1a1,1,0,0,1-1-1v-4a1,1,0,0,1,1-1h1a1,1,0,0,1,1,1v4A1,1,0,0,1,6.666,10.667ZM2,10.667H1a1,1,0,0,1-1-1v-2a1,1,0,0,1,1-1H2a1,1,0,0,1,1,1v2A1,1,0,0,1,2,10.667Z" transform="translate(267.667 0.667)" fill="#fff"/>
+          <g id="Time_Style" transform="translate(0 1)">
+            <g id="_Time">
+              <text id="_9:41" data-name="9:41" transform="translate(0.798 15)" fill="#fff" font-size="14" font-family="SegoeUI, Segoe UI"><tspan x="0" y="0">9:41</tspan></text>
+            </g>
+          </g>
+        </g>
+        <g id="Group_2" data-name="Group 2" transform="translate(0 198)">
+          <path id="Path_4" data-name="Path 4" d="M855.149,344.791l493.29-182.637L959.269-64.862Z" transform="translate(1408.298 344.895) rotate(-175)" fill="#2872a4"/>
+          <path id="Path_3" data-name="Path 3" d="M855.149,399.52l523.477-207.037L965.641-64.862Z" transform="translate(746.522 950.026) rotate(-136)" fill="#3598db"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
