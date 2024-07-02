@@ -12,6 +12,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 
 import '../sheard/widgets/custom_field.dart';
 import '../sheard/widgets/register_button.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
   static const String routeName = "loginScreen";
@@ -60,10 +61,8 @@ class LoginScreen extends StatelessWidget {
           return Form(
             key: LoginCubit.get(context).key,
             child: Scaffold(
-              // resizeToAvoidBottomInset: false,
               body: SingleChildScrollView(
                 child: Stack(
-                  // alignment: Alignment.topCenter,
                   children: [
                     SvgPicture.asset(
                       Assets.imagesAppBarBackground,
@@ -76,7 +75,7 @@ class LoginScreen extends StatelessWidget {
                           children: [
                             AppBar(
                               title: Text(
-                                "Login",
+                                AppLocalizations.of(context)!.login,
                                 style: appBarStyle,
                               ),
                               centerTitle: true,
@@ -86,23 +85,25 @@ class LoginScreen extends StatelessWidget {
                               height: 215.h,
                             ),
                             Text(
-                              "Welcome back!",
+                              AppLocalizations.of(context)!.welcomeBack,
                               style: titleStyle,
                             ),
                             SizedBox(
                               height: 36.h,
                             ),
                             CustomField(
-                              label: "Email",
+                              label: AppLocalizations.of(context)!.email,
                               controller:
                                   LoginCubit.get(context).emailController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return "This field is required";
+                                  return AppLocalizations.of(context)!
+                                      .thisFieldIsRequired;
                                 } else if (!RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(value ?? "")) {
-                                  return "Email not valid !";
+                                  return AppLocalizations.of(context)!
+                                      .emailNotValid;
                                 }
                               },
                               isPassword: false,
@@ -111,12 +112,13 @@ class LoginScreen extends StatelessWidget {
                               height: 56.h,
                             ),
                             CustomField(
-                              label: "Password",
+                              label: AppLocalizations.of(context)!.password,
                               controller:
                                   LoginCubit.get(context).passwordController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return "This field is required";
+                                  return AppLocalizations.of(context)!
+                                      .thisFieldIsRequired;
                                 }
                               },
                               isPassword: true,
@@ -131,7 +133,7 @@ class LoginScreen extends StatelessWidget {
                               height: 40.h,
                             ),
                             Text(
-                              "Forgot password?",
+                              AppLocalizations.of(context)!.forgetPassword,
                               style: labelStyle,
                             ),
                             SizedBox(
@@ -148,7 +150,7 @@ class LoginScreen extends StatelessWidget {
                                   LoginCubit.get(context).login();
                                 }
                               },
-                              title: 'Login',
+                              title: AppLocalizations.of(context)!.login,
                             ),
                             SizedBox(
                               height: 35.h,
@@ -157,7 +159,7 @@ class LoginScreen extends StatelessWidget {
                               onTap: () => Navigator.pushNamed(
                                   context, SignUpScreen.routeName),
                               child: Text(
-                                "Or Create My Account",
+                                AppLocalizations.of(context)!.orCreateMyAccount,
                                 style: labelStyle,
                               ),
                             ),
@@ -174,7 +176,8 @@ class LoginScreen extends StatelessWidget {
                                       .reSendEmailVerification();
                                 },
                                 child: Text(
-                                  "Re send Email Verification",
+                                  AppLocalizations.of(context)!
+                                      .resendEmailVerification,
                                   style:
                                       labelStyle.copyWith(color: primaryColor),
                                 ),

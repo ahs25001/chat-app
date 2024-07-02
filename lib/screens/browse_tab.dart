@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../sheard/styles/colors.dart';
 import '../sheard/styles/styles.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class BrowseTab extends StatelessWidget {
   const BrowseTab({Key? key}) : super(key: key);
 
@@ -40,7 +40,9 @@ class BrowseTab extends StatelessWidget {
                 (state.browserChats?.isEmpty ?? true)) {
               return Center(
                   child: Text(
-                      (state.allChats?.isEmpty??true)?"No chats created yet":"You joined to all chats",
+                (state.allChats?.isEmpty ?? true)
+                    ? AppLocalizations.of(context)!.noChatsCreatedYet
+                    : AppLocalizations.of(context)!.youJoinedToAllChats,
                 style: tabLabelTextStyle.copyWith(color: labelColor),
               ));
             }

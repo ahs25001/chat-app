@@ -6,7 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../sheard/widgets/chat_item.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class MyRoomsTab extends StatelessWidget {
   const MyRoomsTab({Key? key}) : super(key: key);
 
@@ -43,7 +43,7 @@ class MyRoomsTab extends StatelessWidget {
               (state.myChats?.isEmpty ?? true)) {
             return Center(
                 child: Text(
-                  "No chats joined yet",
+                  AppLocalizations.of(context)!.noChatsJoinedYet,
                   style: tabLabelTextStyle.copyWith(color: labelColor),
                 ));
           }

@@ -32,6 +32,7 @@ TextStyle chatTimeStyle = TextStyle(
     color: chatTimeColor,
     fontFamily: "Poppins",
     fontWeight: FontWeight.normal);
+TextStyle menuItemStyle = TextStyle(color: Colors.black, fontSize: 13.sp);
 TextStyle registerTextStyle = TextStyle(
     fontSize: 14.sp,
     color: Colors.white,

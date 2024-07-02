@@ -1,6 +1,7 @@
 import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
+import 'package:chat_app/screens/home_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +12,7 @@ import '../generated/assets.dart';
 import '../sheard/styles/styles.dart';
 import 'chat_body.dart';
 import 'join_to_chat_body.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChatScreen extends StatelessWidget {
   static const String routeName = "chat screen";
 
@@ -25,7 +26,15 @@ class ChatScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) => ChatCubit(chatModel.id ?? "")..getCurrentUser(),
       child: BlocConsumer<ChatCubit, ChatState>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if (state.chatScreenState == ChatScreenState.leaveChatSuccess) {
+            Navigator.pushNamedAndRemoveUntil(
+              context,
+              HomeScreen.routeName,
+              (route) => false,
+            );
+          }
+        },
         builder: (context, state) {
           bool isUserInChat = false;
           for (UserModel? user in (chatModel.users) ?? []) {
@@ -58,25 +67,26 @@ class ChatScreen extends StatelessWidget {
                         iconTheme: const IconThemeData(color: Colors.white),
                         centerTitle: true,
                         backgroundColor: Colors.transparent,
-                        actions: (state.currentUser != null)
+                        actions: (isUserInChat)
                             ? [
                                 PopupMenuButton<int>(
+                                  onSelected: (value) {
+                                    if (value == 0) {
+                                      ChatCubit.get(context)
+                                          .leaveChat(chatModel);
+                                    }
+                                  },
                                   popUpAnimationStyle: AnimationStyle(
                                       duration:
                                           const Duration(milliseconds: 500)),
                                   itemBuilder: (context) {
                                     return [
-                                       PopupMenuItem(
-                                        child: InkWell(
-                                            onTap: () {
-                                              chatModel.users?.remove(state.currentUser);
-                                              for(UserModel ? user in chatModel.users??[]) {
-                                                print(user?.name);
-                                              }
-                                              ChatCubit.get(context)
-                                                  .updateChat(chatModel);
-                                            },
-                                            child: Text("Leave Room")),
+                                      PopupMenuItem(
+                                        value: 0,
+                                        child: Text(
+                                          AppLocalizations.of(context)!.leaveChat,
+                                          style: menuItemStyle,
+                                        ),
                                       )
                                     ];
                                   },

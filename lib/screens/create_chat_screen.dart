@@ -1,7 +1,6 @@
 import 'package:chat_app/cubits/create_chat_cubit/create_chat_cubit.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,6 +10,7 @@ import '../generated/assets.dart';
 import '../sheard/styles/styles.dart';
 import '../sheard/widgets/create_chat_field.dart';
 import '../sheard/widgets/loading.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateChatScreen extends StatelessWidget {
   static const String routeName = "create chat screen";
@@ -31,7 +31,7 @@ class CreateChatScreen extends StatelessWidget {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                 backgroundColor: Colors.green,
-                content: Text("Chat Created Success.",
+                content: Text(AppLocalizations.of(context)!.chatCreatedSuccess,
                     style: registerTextStyle.copyWith(color: Colors.white))));
             Navigator.of(context).pushNamedAndRemoveUntil(
               HomeScreen.routeName,
@@ -67,7 +67,7 @@ class CreateChatScreen extends StatelessWidget {
                       children: [
                         AppBar(
                           title: Text(
-                            "Chat App",
+                            AppLocalizations.of(context)!.chatApp,
                             style: appBarStyle,
                           ),
                           iconTheme: IconThemeData(color: Colors.white),
@@ -94,7 +94,7 @@ class CreateChatScreen extends StatelessWidget {
                               child: Column(
                                 children: [
                                   Text(
-                                    "Create New Chat",
+                                    AppLocalizations.of(context)!.createNewChat,
                                     style: chatTitleStyle,
                                   ),
                                   SizedBox(
@@ -109,13 +109,15 @@ class CreateChatScreen extends StatelessWidget {
                                     height: 45.h,
                                   ),
                                   CreateChatField(
-                                    label: "Enter Chat Name",
+                                    label: AppLocalizations.of(context)!
+                                        .enterChatName,
                                     controller: CreateChatCubit.get(context)
                                         .chatNameController,
                                     validator: (String? value) {
                                       if (value == null ||
                                           value.trim().isEmpty) {
-                                        return "This Field is required";
+                                        return AppLocalizations.of(context)!
+                                            .thisFieldIsRequired;
                                       }
                                     },
                                   ),
@@ -124,12 +126,14 @@ class CreateChatScreen extends StatelessWidget {
                                     validator: (String? value) {
                                       if (value == null ||
                                           value.trim().isEmpty) {
-                                        return "This Field is required";
+                                        return AppLocalizations.of(context)!
+                                            .thisFieldIsRequired;
                                       }
                                     },
                                     controller: CreateChatCubit.get(context)
                                         .chatDescriptionController,
-                                    label: "Enter  Chat Description",
+                                    label: AppLocalizations.of(context)!
+                                        .enterChatDescription,
                                   ),
                                   SizedBox(
                                     height: 75.h,
@@ -149,7 +153,7 @@ class CreateChatScreen extends StatelessWidget {
                                         padding: EdgeInsets.symmetric(
                                             horizontal: 100.w, vertical: 15.h)),
                                     child: Text(
-                                      "Create",
+                                      AppLocalizations.of(context)!.create,
                                       style: buttonNameStyle,
                                     ),
                                   )

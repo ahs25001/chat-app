@@ -18,7 +18,6 @@ class ChatModel extends Equatable{
     users = jsonUsers
         ?.map((dynamic jsonUser) => UserModel.fromJson(jsonUser))
         .toList();
-    print(users);
   }
 
   Map<String, dynamic> toJson() {

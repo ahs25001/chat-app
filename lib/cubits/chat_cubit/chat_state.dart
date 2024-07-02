@@ -7,7 +7,11 @@ enum ChatScreenState {
   getMassagesError,
   joinToChatSuccess,
   joinToChatLoading,
-  joinToChatError,sendMassageSuccess,
+  joinToChatError,
+  leaveChatSuccess,
+  leaveChatLoading,
+  leaveChatError,
+  sendMassageSuccess,
   sendMassageLoading,
   sendMassageError,
 }

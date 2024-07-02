@@ -6,7 +6,8 @@ import 'package:chat_app/sheard/styles/styles.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import '../cubits/app_cubit/app_cubit.dart';
 import '../sheard/widgets/massage_item.dart';
 
 class ChatBody extends StatelessWidget {
@@ -43,25 +44,56 @@ class ChatBody extends StatelessWidget {
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
-                  child: TextFormField(
-                    cursorColor: primaryColor,
-                    controller: ChatCubit.get(context).massageController,
-                    maxLines: 10,
-                    minLines: 1,
-                    style: registerTextStyle.copyWith(color: Colors.black),
-                    decoration: InputDecoration(
-                        hintText: "Type a message",
-                        hintStyle: labelStyle,
-                        contentPadding: EdgeInsets.symmetric(
-                            horizontal: 10.h, vertical: 5.w),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(18.r))),
-                        focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(color: primaryColor),
-                            borderRadius: BorderRadius.only(
-                                topRight: Radius.circular(18.r)))),
-                    // scrollPadding: ,
+                  child: BlocBuilder<AppCubit, AppState>(
+                    builder: (context, state) {
+                      return TextFormField(
+                        cursorColor: primaryColor,
+                        controller: ChatCubit.get(context).massageController,
+                        maxLines: 10,
+                        minLines: 1,
+                        style: registerTextStyle.copyWith(color: Colors.black),
+                        decoration: InputDecoration(
+                            hintText:
+                                AppLocalizations.of(context)!.typeAMassage,
+                            hintStyle: labelStyle,
+                            contentPadding: EdgeInsets.symmetric(
+                                horizontal: 10.h, vertical: 5.w),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                              topRight:
+                                  (state.appStatus == AppStatus.enLanguage)
+                                      ? Radius.circular(18.r)
+                                      : Radius.zero,
+                              topLeft: (state.appStatus == AppStatus.arLanguage)
+                                  ? Radius.circular(18.r)
+                                  : Radius.zero,
+                            )),
+                            focusedBorder: OutlineInputBorder(
+                                borderSide: BorderSide(color: primaryColor),
+                                borderRadius: BorderRadius.only(
+                                  topRight:
+                                      (state.appStatus == AppStatus.enLanguage)
+                                          ? Radius.circular(18.r)
+                                          : Radius.zero,
+                                  topLeft:
+                                      (state.appStatus == AppStatus.arLanguage)
+                                          ? Radius.circular(18.r)
+                                          : Radius.zero,
+                                )),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.only(
+                                topRight:
+                                (state.appStatus == AppStatus.enLanguage)
+                                    ? Radius.circular(18.r)
+                                    : Radius.zero,
+                                topLeft: (state.appStatus == AppStatus.arLanguage)
+                                    ? Radius.circular(18.r)
+                                    : Radius.zero,
+                              ))
+                        ),
+                        // scrollPadding: ,
+                      );
+                    },
                   ),
                 ),
                 SizedBox(
@@ -90,7 +122,7 @@ class ChatBody extends StatelessWidget {
                           child: Row(
                             children: [
                               Text(
-                                "Send",
+                                AppLocalizations.of(context)!.send,
                                 style: registerTextStyle,
                               ),
                               SizedBox(

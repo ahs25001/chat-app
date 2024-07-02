@@ -11,7 +11,7 @@ import '../sheard/styles/colors.dart';
 import '../sheard/styles/styles.dart';
 import '../sheard/widgets/custom_field.dart';
 import '../sheard/widgets/register_button.dart';
-
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SignUpScreen extends StatelessWidget {
   static const String routeName = "signUp";
 
@@ -43,7 +43,7 @@ class SignUpScreen extends StatelessWidget {
             Navigator.pop(context);
             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text(
-                "Account Created Success , Verify Email Now.",
+                AppLocalizations.of(context)!.accountCreatedSuccess,
                 style: registerTextStyle.copyWith(color: Colors.white),
               ),
               backgroundColor: Colors.green,
@@ -77,7 +77,7 @@ class SignUpScreen extends StatelessWidget {
                           children: [
                             AppBar(
                               title: Text(
-                                "Create Account",
+                                AppLocalizations.of(context)!.createAccount,
                                 style: appBarStyle,
                               ),
                               iconTheme: IconThemeData(color: Colors.white),
@@ -88,12 +88,12 @@ class SignUpScreen extends StatelessWidget {
                               height: 248.h,
                             ),
                             CustomField(
-                              label: "Full Name",
+                              label:AppLocalizations.of(context)!.fullName,
                               controller:
                                   SignUpCubit.get(context).nameController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return "This field is required";
+                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
                                 }
                               },
                               isPassword: false,
@@ -102,12 +102,12 @@ class SignUpScreen extends StatelessWidget {
                               height: 56.h,
                             ),
                             CustomField(
-                              label: "Email",
+                              label: AppLocalizations.of(context)!.email,
                               controller:
                                   SignUpCubit.get(context).emailController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return "This field is required";
+                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
                                 } else if (!RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(value ?? "")) {
@@ -120,12 +120,12 @@ class SignUpScreen extends StatelessWidget {
                               height: 56.h,
                             ),
                             CustomField(
-                              label: "Password",
+                              label: AppLocalizations.of(context)!.password,
                               controller:
                                   SignUpCubit.get(context).passwordController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return "This field is required";
+                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
                                 }
                               },
                               isPassword: true,
@@ -150,7 +150,7 @@ class SignUpScreen extends StatelessWidget {
                                   SignUpCubit.get(context).signUp();
                                 }
                               },
-                              title: 'Create Account',
+                              title: AppLocalizations.of(context)!.createAccount,
                             ),
                           ],
                         ),

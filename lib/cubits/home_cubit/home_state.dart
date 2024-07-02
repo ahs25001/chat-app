@@ -35,7 +35,7 @@ class HomeState {
         errorMassage: errorMassage ?? this.errorMassage,
         browserChats: browserChats ?? this.browserChats,
         currentUser: currentUser ?? this.currentUser,
-        myChats: myChats ?? this.browserChats,
+        myChats: myChats ?? this.myChats,
         homeScreenState: homeScreenState ?? this.homeScreenState,
         allChats: allChats ?? this.allChats);
   }

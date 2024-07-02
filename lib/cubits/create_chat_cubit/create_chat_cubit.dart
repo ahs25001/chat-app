@@ -1,10 +1,11 @@
 import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
-import 'package:chat_app/sheard/network/firebase/firebase_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../sheard/network/local/firebase/firebase_manager.dart';
 
 part 'create_chat_state.dart';
 

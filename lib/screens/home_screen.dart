@@ -2,6 +2,8 @@ import 'package:chat_app/cubits/home_cubit/home_cubit.dart';
 import 'package:chat_app/screens/browse_tab.dart';
 import 'package:chat_app/screens/create_chat_screen.dart';
 import 'package:chat_app/screens/my_rooms_tab.dart';
+import 'package:chat_app/screens/search_screen.dart';
+import 'package:chat_app/screens/settings_screen.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +12,7 @@ import 'package:flutter_svg/svg.dart';
 
 import '../generated/assets.dart';
 import '../sheard/styles/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
   static const String routeName = "home screen";
@@ -40,8 +43,38 @@ class HomeScreen extends StatelessWidget {
                   color: Colors.white,
                 ),
               ),
-              drawer: const Column(
-                children: [],
+              drawer: SafeArea(
+                child: Container(
+                  padding:
+                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                  color: Colors.white,
+                  child: Column(
+                    children: [
+                      InkWell(
+                        onTap: () =>
+                            Navigator.pushNamed(
+                                context, SettingsScreen.routeName),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(
+                              Icons.settings,
+
+                            ),
+                            SizedBox(
+                              width: 10.w,
+                            ),
+                            Text(
+                              AppLocalizations.of(context)!.settings,
+                              style: tabLabelTextStyle.copyWith(
+                                  color: Colors.black),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
               ),
               body: Stack(
                 children: [
@@ -58,7 +91,7 @@ class HomeScreen extends StatelessWidget {
                           height: 193.h,
                           child: AppBar(
                             title: Text(
-                              "Chat App",
+                              AppLocalizations.of(context)!.chatApp,
                               style: appBarStyle,
                             ),
                             iconTheme: const IconThemeData(color: Colors.white),
@@ -70,19 +103,24 @@ class HomeScreen extends StatelessWidget {
                               labelStyle: tabLabelTextStyle,
                               unselectedLabelStyle: tabLabelTextStyle.copyWith(
                                   color: unselectedTabLabelColor),
-                              tabs: const [
+                              tabs: [
                                 Tab(
-                                  text: "My Chats",
+                                  text: AppLocalizations.of(context)!.myChats,
                                 ),
                                 Tab(
-                                  text: "Browse",
+                                  text: AppLocalizations.of(context)!.browse,
                                 )
                               ],
                             ),
                             actions: [
-                              Icon(
-                                Icons.search,
-                                size: 30.sp,
+                              InkWell(
+                                onTap: () =>
+                                    Navigator.pushNamed(
+                                        context, SearchScreen.routeName),
+                                child: Icon(
+                                  Icons.search,
+                                  size: 30.sp,
+                                ),
                               )
                             ],
                           ),
@@ -92,7 +130,7 @@ class HomeScreen extends StatelessWidget {
                         // ),
                         const Expanded(
                           child:
-                              TabBarView(children: [MyRoomsTab(), BrowseTab()]),
+                          TabBarView(children: [MyRoomsTab(), BrowseTab()]),
                         )
                       ],
                     ),

@@ -2,13 +2,14 @@ import 'package:bloc/bloc.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/massage_model.dart';
 import 'package:chat_app/models/user_model.dart';
-import 'package:chat_app/sheard/network/firebase/firebase_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../../sheard/network/local/firebase/firebase_manager.dart';
 
 part 'chat_state.dart';
 
@@ -52,10 +53,30 @@ class ChatCubit extends Cubit<ChatState> {
     }
   }
 
-  void updateChat(ChatModel? newChatModel) {
-    emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatLoading));
-    FirebaseManager.updateChat(newChatModel);
-    emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatSuccess));
+  void joinToChat(ChatModel? chatModel, UserModel? user) {
+    try {
+      emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatLoading));
+      chatModel?.users?.add(user);
+      FirebaseManager.updateChat(chatModel);
+      emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatSuccess));
+    } catch (e) {
+      emit(state.copyWith(
+          chatScreenState: ChatScreenState.joinToChatError,
+          massage: e.toString()));
+    }
+  }
+
+  void leaveChat(ChatModel? chatModel) {
+    try {
+      emit(state.copyWith(chatScreenState: ChatScreenState.leaveChatLoading));
+      chatModel?.users?.remove(state.currentUser);
+      FirebaseManager.updateChat(chatModel);
+      emit(state.copyWith(chatScreenState: ChatScreenState.leaveChatSuccess));
+    } catch (e) {
+      emit(state.copyWith(
+          chatScreenState: ChatScreenState.leaveChatError,
+          massage: e.toString()));
+    }
   }
 
   void getCurrentUser() async {

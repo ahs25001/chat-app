@@ -1,10 +1,11 @@
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/sheard/errors/firebase_errors.dart';
-import 'package:chat_app/sheard/network/firebase/firebase_manager.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
+
+import '../../sheard/network/local/firebase/firebase_manager.dart';
 
 part 'login_state.dart';
 

@@ -9,9 +9,10 @@ import '../generated/assets.dart';
 import '../models/user_model.dart';
 import '../sheard/styles/colors.dart';
 import '../sheard/styles/styles.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class JoinToChatBody extends StatelessWidget {
-  ChatModel ? chatModel;
+  ChatModel? chatModel;
 
   UserModel? user;
 
@@ -27,14 +28,14 @@ class JoinToChatBody extends StatelessWidget {
         child: Column(
           children: [
             Text(
-              "Hello, Welcome to our chat room",
+              AppLocalizations.of(context)!.welcomeMassage,
               style: registerTextStyle.copyWith(color: Colors.black),
             ),
             SizedBox(
               height: 5.h,
             ),
             Text(
-              "Join The ${chatModel?.title??""}",
+              "${AppLocalizations.of(context)!.joinThe} ${chatModel?.title ?? ""}",
               style: chatTitleStyle,
             ),
             SizedBox(
@@ -54,17 +55,16 @@ class JoinToChatBody extends StatelessWidget {
             ),
             ElevatedButton(
               onPressed: () {
-                chatModel?.users?.add(user);
-                ChatCubit.get(context).updateChat(chatModel);
+                ChatCubit.get(context).joinToChat(chatModel, user);
               },
               child: Text(
-                "Join",
+                AppLocalizations.of(context)!.join,
                 style: buttonNameStyle,
               ),
               style: ElevatedButton.styleFrom(
                   backgroundColor: primaryColor,
-                  padding: EdgeInsets.symmetric(
-                      horizontal: 61.w, vertical: 15.h),
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 61.w, vertical: 15.h),
                   shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12.r))),
             )
