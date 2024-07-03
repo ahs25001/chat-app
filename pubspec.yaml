@@ -53,6 +53,8 @@ dependencies:
 flutter_native_splash:
   background_image: "assets/images/splash.png"
   ios: true
+  android_12:
+    image: assets/images/logo.png
 dev_dependencies:
   flutter_test:
     sdk: flutter

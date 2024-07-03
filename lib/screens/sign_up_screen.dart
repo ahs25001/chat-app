@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/login_screen.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +14,6 @@ import '../sheard/widgets/custom_field.dart';
 import '../sheard/widgets/register_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class SignUpScreen extends StatelessWidget {
-  static const String routeName = "signUp";
 
   const SignUpScreen({Key? key}) : super(key: key);
 
@@ -50,7 +50,7 @@ class SignUpScreen extends StatelessWidget {
             ));
             Navigator.pushNamedAndRemoveUntil(
               context,
-              LoginScreen.routeName,
+              AppRoutes.loginScreen,
               (route) => false,
             );
           } else if (state.signUpScreenState ==

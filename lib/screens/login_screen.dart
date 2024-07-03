@@ -2,6 +2,7 @@ import 'package:chat_app/cubits/login_cubit/login_cubit.dart';
 import 'package:chat_app/generated/assets.dart';
 import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/screens/sign_up_screen.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,7 +16,6 @@ import '../sheard/widgets/register_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class LoginScreen extends StatelessWidget {
-  static const String routeName = "loginScreen";
 
   const LoginScreen({Key? key}) : super(key: key);
 
@@ -43,7 +43,7 @@ class LoginScreen extends StatelessWidget {
             Navigator.pop(context);
             Navigator.pushNamedAndRemoveUntil(
               context,
-              HomeScreen.routeName,
+              AppRoutes.homeScreen,
               (route) => false,
             );
           } else if (state.loginScreenState == LoginScreenState.loginError) {
@@ -157,7 +157,7 @@ class LoginScreen extends StatelessWidget {
                             ),
                             InkWell(
                               onTap: () => Navigator.pushNamed(
-                                  context, SignUpScreen.routeName),
+                                  context, AppRoutes.signUpScreen),
                               child: Text(
                                 AppLocalizations.of(context)!.orCreateMyAccount,
                                 style: labelStyle,

@@ -1,4 +1,5 @@
 import 'package:chat_app/screens/login_screen.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,7 +9,6 @@ import '../generated/assets.dart';
 import 'home_screen.dart';
 
 class SplashScreen extends StatefulWidget {
-  static const String routeName = "splashScreen";
 
   const SplashScreen({Key? key}) : super(key: key);
 
@@ -30,12 +30,12 @@ class _SplashScreenState extends State<SplashScreen>
           (FirebaseAuth.instance.currentUser != null)
               ? Navigator.pushNamedAndRemoveUntil(
                   context,
-                  HomeScreen.routeName,
+                  AppRoutes.homeScreen,
                   (route) => false,
                 )
               : Navigator.pushNamedAndRemoveUntil(
                   context,
-                  LoginScreen.routeName,
+                  AppRoutes.loginScreen,
                   (route) => false,
                 );
         }

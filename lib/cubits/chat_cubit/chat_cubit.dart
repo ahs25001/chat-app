@@ -82,6 +82,8 @@ class ChatCubit extends Cubit<ChatState> {
   void getCurrentUser() async {
     UserModel? currentUser = await FirebaseManager.getUserById(
         FirebaseAuth.instance.currentUser?.uid ?? "");
-    emit(state.copyWith(currentUser: currentUser));
+    if(!isClosed){
+      emit(state.copyWith(currentUser: currentUser));
+    }
   }
 }

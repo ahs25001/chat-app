@@ -8,8 +8,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SearchScreen extends StatelessWidget {
-  static const String routeName = "search";
-
   const SearchScreen({Key? key}) : super(key: key);
 
   @override

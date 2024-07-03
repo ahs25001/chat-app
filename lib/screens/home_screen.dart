@@ -3,7 +3,7 @@ import 'package:chat_app/screens/browse_tab.dart';
 import 'package:chat_app/screens/create_chat_screen.dart';
 import 'package:chat_app/screens/my_rooms_tab.dart';
 import 'package:chat_app/screens/search_screen.dart';
-import 'package:chat_app/screens/settings_screen.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -15,7 +15,6 @@ import '../sheard/styles/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
-  static const String routeName = "home screen";
 
   const HomeScreen({super.key});
 
@@ -34,7 +33,7 @@ class HomeScreen extends StatelessWidget {
             child: Scaffold(
               floatingActionButton: FloatingActionButton(
                 onPressed: () async {
-                  Navigator.pushNamed(context, CreateChatScreen.routeName);
+                  Navigator.pushNamed(context, AppRoutes.createChatScreen);
                 },
                 backgroundColor: primaryColor,
                 shape: const CircleBorder(),
@@ -53,11 +52,11 @@ class HomeScreen extends StatelessWidget {
                       InkWell(
                         onTap: () =>
                             Navigator.pushNamed(
-                                context, SettingsScreen.routeName),
+                                context, AppRoutes.settingsScreen),
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.settings,
 
                             ),
@@ -116,7 +115,7 @@ class HomeScreen extends StatelessWidget {
                               InkWell(
                                 onTap: () =>
                                     Navigator.pushNamed(
-                                        context, SearchScreen.routeName),
+                                        context, AppRoutes.searchScreen),
                                 child: Icon(
                                   Icons.search,
                                   size: 30.sp,

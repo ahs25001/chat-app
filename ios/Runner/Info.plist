@@ -6,7 +6,7 @@
 		<string>$(DEVELOPMENT_LANGUAGE)</string>
 		<key>CFBundleDisplayName</key>
 		<key>NSMicrophoneUsageDescription</key>
-        <string>Some message to describe why you need this permission</string>
+		<string>Some message to describe why you need this permission</string>
 		<string>Chat App</string>
 		<key>CFBundleExecutable</key>
 		<string>$(EXECUTABLE_NAME)</string>

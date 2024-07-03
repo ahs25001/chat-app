@@ -7,8 +7,6 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class SettingsScreen extends StatelessWidget {
-  static const String routeName = "settings";
-
   const SettingsScreen({Key? key}) : super(key: key);
 
   @override

@@ -2,6 +2,7 @@ import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/screens/home_screen.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -14,7 +15,6 @@ import 'chat_body.dart';
 import 'join_to_chat_body.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ChatScreen extends StatelessWidget {
-  static const String routeName = "chat screen";
 
   const ChatScreen({super.key});
 
@@ -30,7 +30,7 @@ class ChatScreen extends StatelessWidget {
           if (state.chatScreenState == ChatScreenState.leaveChatSuccess) {
             Navigator.pushNamedAndRemoveUntil(
               context,
-              HomeScreen.routeName,
+              AppRoutes.homeScreen,
               (route) => false,
             );
           }
