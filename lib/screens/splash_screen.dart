@@ -62,7 +62,7 @@ class _SplashScreenState extends State<SplashScreen>
           SlideTransition(
               position: animation,
               child: SvgPicture.asset(
-                Assets.imagesLogo,
+                Assets.imagesLogoSvg,
                 width: 142.w,
                 height: 142.h,
               ))

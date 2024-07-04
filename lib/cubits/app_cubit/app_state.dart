@@ -2,8 +2,9 @@ part of 'app_cubit.dart';
 
 enum AppStatus {
   init,
-  arLanguage,
-  enLanguage,
+  signOutLoading,
+  signOutSuccess,
+  signOutError,
 }
 
 @immutable

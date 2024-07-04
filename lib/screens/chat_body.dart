@@ -3,7 +3,9 @@ import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/massage_model.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -47,12 +49,33 @@ class ChatBody extends StatelessWidget {
                   child: BlocBuilder<AppCubit, AppState>(
                     builder: (context, state) {
                       return TextFormField(
+                        onChanged: (value) {
+                          ChatCubit.get(context).setMassageOption(value);
+                        },
                         cursorColor: primaryColor,
                         controller: ChatCubit.get(context).massageController,
                         maxLines: 10,
                         minLines: 1,
                         style: registerTextStyle.copyWith(color: Colors.black),
                         decoration: InputDecoration(
+                            suffixIcon: AnimatedSwitcher(
+                              transitionBuilder: (child, animation) {
+                                return ScaleTransition(scale: animation,child: child,);
+                              },
+                              duration: 200.ms,
+                              child: (ChatCubit.get(context)
+                                          .state
+                                          .massageIsEmpty ??
+                                      true)
+                                  ? Icon(
+                                      key: ValueKey(ChatCubit.get(context)
+                                          .state
+                                          .massageIsEmpty),
+                                      Icons.camera,
+                                      color: primaryColor,
+                                    )
+                                  : SizedBox(),
+                            ),
                             hintText:
                                 AppLocalizations.of(context)!.typeAMassage,
                             hintStyle: labelStyle,
@@ -60,37 +83,32 @@ class ChatBody extends StatelessWidget {
                                 horizontal: 10.h, vertical: 5.w),
                             border: OutlineInputBorder(
                                 borderRadius: BorderRadius.only(
-                              topRight:
-                                  (state.appStatus == AppStatus.enLanguage)
-                                      ? Radius.circular(18.r)
-                                      : Radius.zero,
-                              topLeft: (state.appStatus == AppStatus.arLanguage)
+                              topRight: (state.localCode == "en")
+                                  ? Radius.circular(18.r)
+                                  : Radius.zero,
+                              topLeft: (state.localCode == "ar")
                                   ? Radius.circular(18.r)
                                   : Radius.zero,
                             )),
                             focusedBorder: OutlineInputBorder(
                                 borderSide: BorderSide(color: primaryColor),
                                 borderRadius: BorderRadius.only(
-                                  topRight:
-                                      (state.appStatus == AppStatus.enLanguage)
-                                          ? Radius.circular(18.r)
-                                          : Radius.zero,
-                                  topLeft:
-                                      (state.appStatus == AppStatus.arLanguage)
-                                          ? Radius.circular(18.r)
-                                          : Radius.zero,
+                                  topRight: (state.localCode == "en")
+                                      ? Radius.circular(18.r)
+                                      : Radius.zero,
+                                  topLeft: (state.localCode == "ar")
+                                      ? Radius.circular(18.r)
+                                      : Radius.zero,
                                 )),
-                          enabledBorder: OutlineInputBorder(
-                              borderRadius: BorderRadius.only(
-                                topRight:
-                                (state.appStatus == AppStatus.enLanguage)
-                                    ? Radius.circular(18.r)
-                                    : Radius.zero,
-                                topLeft: (state.appStatus == AppStatus.arLanguage)
-                                    ? Radius.circular(18.r)
-                                    : Radius.zero,
-                              ))
-                        ),
+                            enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.only(
+                              topRight: (state.localCode == "en")
+                                  ? Radius.circular(18.r)
+                                  : Radius.zero,
+                              topLeft: (state.localCode == "ar")
+                                  ? Radius.circular(18.r)
+                                  : Radius.zero,
+                            ))),
                         // scrollPadding: ,
                       );
                     },
@@ -105,38 +123,40 @@ class ChatBody extends StatelessWidget {
                       )
                     : InkWell(
                         onTap: () {
-                          if (ChatCubit.get(context)
-                              .massageController
-                              .text
-                              .trim()
-                              .isNotEmpty) {
-                            ChatCubit.get(context).sendMassage(chat: chatModel);
+                          if (state.massageIsEmpty ?? true) {
+                          } else {
+                            if (ChatCubit.get(context)
+                                .massageController
+                                .text
+                                .trim()
+                                .isNotEmpty) {
+                              ChatCubit.get(context)
+                                  .sendMassage(chat: chatModel);
+                            }
                           }
                         },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              color: primaryColor,
-                              borderRadius: BorderRadius.circular(12.r)),
-                          padding: EdgeInsets.symmetric(
-                              vertical: 15.h, horizontal: 16.w),
-                          child: Row(
-                            children: [
-                              Text(
-                                AppLocalizations.of(context)!.send,
-                                style: registerTextStyle,
-                              ),
-                              SizedBox(
-                                width: 15.w,
-                              ),
-                              Icon(
-                                Icons.send,
-                                size: 16.sp,
-                                color: Colors.white,
-                              )
-                            ],
+                        child: CircleAvatar(
+                          backgroundColor: primaryColor,
+                          radius: 30.r,
+                          child: AnimatedSwitcher(
+                            duration: Duration(milliseconds: 200),
+                            transitionBuilder: (child, animation) {
+                              return ScaleTransition(
+                                scale: animation,
+                                child: child,
+                              );
+                            },
+                            child: Icon(
+                              (state.massageIsEmpty ?? true)
+                                  ? Icons.mic
+                                  : Icons.send,
+                              key: ValueKey(state.massageIsEmpty),
+                              color: Colors.white,
+                              size: 25.sp,
+                            ),
                           ),
                         ),
-                      )
+                      ),
               ],
             ),
           ],

@@ -33,5 +33,9 @@
   "settings": "Settings",
   "arabic": "Arabic",
   "english": "English",
-  "language": "Language"
+  "language": "Language",
+  "editeProfile": "Edite Profile",
+  "signOut": "Sign Out"
+
+
 }

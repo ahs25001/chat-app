@@ -2,6 +2,7 @@ import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/sheard/errors/firebase_errors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 import '../../../../models/massage_model.dart';
@@ -36,7 +37,8 @@ class FirebaseManager {
   }
 
   static Future<QuerySnapshot<ChatModel>> searchInChats(String name) async {
-    return await getChatCollection().where('title', isGreaterThanOrEqualTo: name)
+    return await getChatCollection()
+        .where('title', isGreaterThanOrEqualTo: name)
         .where('title', isLessThanOrEqualTo: '$name\uf7ff')
         .get();
   }
@@ -121,5 +123,13 @@ class FirebaseManager {
     CollectionReference<UserModel> collection = getUserCollection();
     DocumentReference<UserModel> docRef = collection.doc(user.id);
     docRef.set(user);
+  }
+
+  static Future<Either<void, FirebaseErrors>> signOut() async {
+    try {
+      return Left(await FirebaseAuth.instance.signOut());
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 }

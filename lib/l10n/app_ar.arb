@@ -33,5 +33,7 @@
   "settings": "الاعدادات",
   "arabic": "العربية",
   "english": "الانجليزية",
-  "language": "اللغة"
+  "language": "اللغة",
+  "editeProfile": "تعديل الملف الشخصي",
+  "signOut": "تسجيل الخروج"
 }

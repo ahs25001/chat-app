@@ -1,3 +1,5 @@
+import 'package:chat_app/sheard/errors/firebase_errors.dart';
+import 'package:chat_app/sheard/network/local/firebase/firebase_manager.dart';
 import 'package:chat_app/sheard/network/local/shared_preferences/shared_preferences_manager.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:meta/meta.dart';
@@ -11,16 +13,27 @@ class AppCubit extends Cubit<AppState> {
 
   void changeLocal(String code) {
     SharedPreferencesManager.saveString("local", code);
-    emit(state.copyWith(
-        appStatus: (code == "ar") ? AppStatus.arLanguage : AppStatus.enLanguage,
-        localCode: code));
+    emit(state.copyWith(localCode: code));
   }
 
   void getCurrentLocal() {
     String? code = SharedPreferencesManager.getString("local");
     emit(state.copyWith(
-        localCode: code ?? "en",
-        appStatus:
-            (code == "ar") ? AppStatus.arLanguage : AppStatus.enLanguage));
+      localCode: code ?? "en",
+    ));
+  }
+
+  void signOut() async {
+    emit(state.copyWith(appStatus: AppStatus.signOutLoading));
+
+    var response = await FirebaseManager.signOut();
+    response.fold(
+      (l) {
+        emit(state.copyWith(appStatus: AppStatus.signOutSuccess));
+      },
+      (r) {
+        emit(state.copyWith(appStatus: AppStatus.signOutError));
+      },
+    );
   }
 }

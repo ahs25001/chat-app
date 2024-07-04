@@ -15,7 +15,6 @@ import '../sheard/styles/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatelessWidget {
-
   const HomeScreen({super.key});
 
   @override
@@ -45,20 +44,21 @@ class HomeScreen extends StatelessWidget {
               drawer: SafeArea(
                 child: Container(
                   padding:
-                  EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
+                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 20.h),
                   color: Colors.white,
                   child: Column(
                     children: [
                       InkWell(
-                        onTap: () =>
-                            Navigator.pushNamed(
-                                context, AppRoutes.settingsScreen),
+                        onTap: () {
+                          Navigator.pop(context);
+                          Navigator.pushNamed(
+                              context, AppRoutes.settingsScreen);
+                        },
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             const Icon(
                               Icons.settings,
-
                             ),
                             SizedBox(
                               width: 10.w,
@@ -113,9 +113,8 @@ class HomeScreen extends StatelessWidget {
                             ),
                             actions: [
                               InkWell(
-                                onTap: () =>
-                                    Navigator.pushNamed(
-                                        context, AppRoutes.searchScreen),
+                                onTap: () => Navigator.pushNamed(
+                                    context, AppRoutes.searchScreen),
                                 child: Icon(
                                   Icons.search,
                                   size: 30.sp,
@@ -129,7 +128,7 @@ class HomeScreen extends StatelessWidget {
                         // ),
                         const Expanded(
                           child:
-                          TabBarView(children: [MyRoomsTab(), BrowseTab()]),
+                              TabBarView(children: [MyRoomsTab(), BrowseTab()]),
                         )
                       ],
                     ),
