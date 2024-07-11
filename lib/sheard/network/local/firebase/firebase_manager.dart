@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
 import 'package:chat_app/sheard/errors/firebase_errors.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 
 import '../../../../models/massage_model.dart';
 
@@ -67,6 +70,18 @@ class FirebaseManager {
     docRef.set(massage);
   }
 
+  static Future<Either<String, FirebaseErrors>> uploadFileOnFirebase(
+      String path, File file) async {
+    try {
+      UploadTask task =
+      FirebaseStorage.instance.ref().child(path).putFile(file);
+      var snapShot = await task.whenComplete(() {},);
+      return Left(await snapShot.ref.getDownloadURL());
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
+  }
+
   ///user operations
   static Future<FirebaseErrors?> createAccount(
       String emailAddress, String password) async {
@@ -97,7 +112,7 @@ class FirebaseManager {
       if (!(credential.user!.emailVerified)) {
         return FirebaseErrors('Pleas verify your email.');
       }
-    } on FirebaseAuthException catch (e) {
+    } on FirebaseAuthException catch (_) {
       return FirebaseErrors('Wrong password or email.');
     }
     return null;
@@ -132,4 +147,5 @@ class FirebaseManager {
       return Right(FirebaseErrors(e.toString()));
     }
   }
+
 }

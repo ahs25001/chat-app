@@ -2,7 +2,7 @@
 class Assets {
   Assets._();
 
-  static const String assetsImagesLogo = 'assets/images/logo.svg';
+  static const String assetsImagesLogo = 'assets/images/logoSvg.svg';
   static const String fontsPoppinsBlack = 'assets/fonts/Poppins-Black.ttf';
   static const String fontsPoppinsBlackItalic = 'assets/fonts/Poppins-BlackItalic.ttf';
   static const String fontsPoppinsBold = 'assets/fonts/Poppins-Bold.ttf';
@@ -25,11 +25,12 @@ class Assets {
   static const String imagesChat = 'assets/images/chat.svg';
   static const String imagesGroup = 'assets/images/group.svg';
   static const String imagesLogo = 'assets/images/logo.png';
-  static const String imagesLogoSvg = 'assets/images/logo.svg';
+  static const String imagesLogoSvg = 'assets/images/logoSvg.svg';
   static const String imagesMovies = 'assets/images/movies.svg';
   static const String imagesSplash = 'assets/images/splash.png';
   static const String imagesSplash2x = 'assets/images/splash@2x.png';
   static const String imagesSplash3x = 'assets/images/splash@3x.png';
   static const String lottieFilesSettingsAnimation  = 'assets/lottie_files/settingsAnimation .json';
+  static const String voicesNotification = 'voices/Notification.mp3';
 
 }

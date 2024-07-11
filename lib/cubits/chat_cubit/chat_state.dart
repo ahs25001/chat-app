@@ -14,6 +14,11 @@ enum ChatScreenState {
   sendMassageSuccess,
   sendMassageLoading,
   sendMassageError,
+  voiceMassagePlayed,
+  voiceMassageLoading,
+  voiceMassagePaused,
+  voiceMassageError,
+  voiceMassageComplete,
 }
 
 @immutable
@@ -21,6 +26,8 @@ class ChatState {
   ChatScreenState? chatScreenState;
   String? massage;
   UserModel? currentUser;
+  num? currentVoicePositionInSeconds;
+  MassageModel? playedMassage;
   bool? massageIsEmpty;
   QuerySnapshot<MassageModel>? massagesSnapshot;
 
@@ -28,18 +35,25 @@ class ChatState {
       {this.chatScreenState,
       this.currentUser,
       this.massageIsEmpty,
+      this.currentVoicePositionInSeconds,
       this.massagesSnapshot,
+      this.playedMassage,
       this.massage});
 
   ChatState copyWith(
       {ChatScreenState? chatScreenState,
       bool? massageIsEmpty,
       String? massage,
+      num? currentVoicePositionInSeconds,
+      MassageModel? playedMassage,
       UserModel? currentUser,
       QuerySnapshot<MassageModel>? massagesSnapshot}) {
     return ChatState(
+        playedMassage: playedMassage ?? this.playedMassage,
         massageIsEmpty: massageIsEmpty ?? this.massageIsEmpty,
         massage: massage ?? this.massage,
+        currentVoicePositionInSeconds:
+            currentVoicePositionInSeconds ?? this.currentVoicePositionInSeconds,
         currentUser: currentUser ?? this.currentUser,
         chatScreenState: chatScreenState ?? this.chatScreenState,
         massagesSnapshot: massagesSnapshot ?? this.massagesSnapshot);
