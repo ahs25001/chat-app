@@ -45,4 +45,10 @@ class AudioManager {
       return Right(AudioPlayerErrors(e.toString()));
     }
   }
+  static void pausePlayer()async {
+     await player.pause();
+  }
+  static void resumePlayer()async{
+   await player.resume();
+  }
 }

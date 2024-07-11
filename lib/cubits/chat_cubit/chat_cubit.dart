@@ -96,7 +96,6 @@ class ChatCubit extends Cubit<ChatState> {
                 massageIsEmpty: true));
           },
           (r) {
-            print("${r.massage} =====================================");
             emit(state.copyWith(
                 chatScreenState: ChatScreenState.sendMassageError,
                 massage: r.massage,
@@ -105,7 +104,6 @@ class ChatCubit extends Cubit<ChatState> {
         );
       },
       (r) {
-        print("${r.massage} =====================================");
         emit(state.copyWith(
             chatScreenState: ChatScreenState.sendMassageError,
             massage: r.massage,
@@ -178,6 +176,16 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(
         chatScreenState: ChatScreenState.voiceMassageComplete,
         currentVoicePositionInSeconds: 0));
+  }
+
+  void pauseMassage() {
+    AudioManager.pausePlayer();
+    emit(state.copyWith(chatScreenState: ChatScreenState.voiceMassagePaused));
+  }
+
+  void resumeMassage() {
+    AudioManager.resumePlayer();
+    emit(state.copyWith(chatScreenState: ChatScreenState.voiceMassagePlayed));
   }
 
   void selectPhotoFromCamera() async {

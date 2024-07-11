@@ -27,7 +27,17 @@ class VoiceMassageWidget extends StatelessWidget {
               children: [
                 InkWell(
                   onTap: () {
-                    ChatCubit.get(context).playMassage(massageModel);
+                    if (state.chatScreenState ==
+                            ChatScreenState.voiceMassagePlayed &&
+                        state.playedMassage?.id == massageModel?.id) {
+                      ChatCubit.get(context).pauseMassage();
+                    } else if (state.chatScreenState ==
+                            ChatScreenState.voiceMassagePaused &&
+                        state.playedMassage?.id == massageModel?.id) {
+                      ChatCubit.get(context).resumeMassage();
+                    } else {
+                      ChatCubit.get(context).playMassage(massageModel);
+                    }
                   },
                   child: (state.chatScreenState ==
                               ChatScreenState.voiceMassageLoading &&
