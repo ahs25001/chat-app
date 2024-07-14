@@ -26,10 +26,10 @@ class MassageModel extends Equatable {
       : this(
           chatId: json["chatId"],
           content: json["content"],
+          imageLink: json["imageLink"],
           sendTime: json["sendTime"],
           durationInSecond: json["durationInSecond"],
           senderName: json["senderName"],
-          imageLink: json["imageLink"],
           voiceLink: json["voiceLink"],
           senderId: json["senderId"],
           id: json["id"],
@@ -41,10 +41,10 @@ class MassageModel extends Equatable {
       "content": content,
       "durationInSecond": durationInSecond,
       "senderName": senderName,
+      "imageLink": imageLink,
       "senderId": senderId,
       "sendTime": sendTime,
       "id": id,
-      "imageLink": imageLink,
       "voiceLink": voiceLink,
     };
   }

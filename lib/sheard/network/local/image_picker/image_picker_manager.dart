@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 
@@ -5,24 +8,32 @@ class ImagePickerManager {
   static final ImagePicker picker = ImagePicker();
 
   static Future<XFile?> getImageFromCamera() async {
-    Permission permission = Permission.camera;
-    PermissionStatus permissionStatus = await permission.status;
-    if (permissionStatus.isDenied) {
-      permissionStatus = await permission.request();
-      if (permissionStatus.isGranted || permissionStatus.isLimited) {
-        XFile? image = await picker.pickImage(source: ImageSource.camera);
-        return image;
-      }
-    } else {
+    try {
       XFile? image = await picker.pickImage(source: ImageSource.camera);
       return image;
+    } catch (e) {
+      print(e.toString());
     }
-    XFile? image = await picker.pickImage(source: ImageSource.camera);
-    return image;
+    return null;
   }
 
   static Future<XFile?> getImageFromGallery() async {
-    XFile? image = await picker.pickImage(source: ImageSource.gallery);
-    return image;
+    var deviceInfo = await DeviceInfoPlugin().androidInfo;
+    if (deviceInfo.version.sdkInt <= 32 && Platform.isAndroid) {
+      var permission = await Permission.storage.request();
+      if (permission == PermissionStatus.granted ||
+          permission == PermissionStatus.limited) {
+        XFile? image = await picker.pickImage(source: ImageSource.gallery);
+        return image;
+      }
+    } else {
+      var permission = await Permission.photos.request();
+      if (permission == PermissionStatus.granted ||
+          permission == PermissionStatus.limited) {
+        XFile? image = await picker.pickImage(source: ImageSource.gallery);
+        return image;
+      }
+    }
+    return null;
   }
 }

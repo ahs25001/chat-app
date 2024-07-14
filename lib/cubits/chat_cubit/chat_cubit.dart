@@ -1,6 +1,5 @@
 import 'dart:io';
-
-import 'package:audioplayers/audioplayers.dart';
+import 'package:image/image.dart' as img;
 import 'package:bloc/bloc.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/massage_model.dart';
@@ -9,20 +8,22 @@ import 'package:chat_app/sheard/network/local/audio/audio_manager.dart';
 import 'package:chat_app/sheard/network/local/image_picker/image_picker_manager.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:meta/meta.dart';
 
+// import 'package:flutter_blurhash/flutter_blurhash.dart';
 import '../../sheard/network/local/firebase/firebase_manager.dart';
 import '../../sheard/network/local/record/record_manager.dart';
 
 part 'chat_state.dart';
 
 class ChatCubit extends Cubit<ChatState> {
-  ChatCubit(String chatId) : super(ChatInitial()) {
-    getMassages(chatId);
+  ChatCubit({String? chatId}) : super(ChatInitial()) {
+    if (chatId != null) {
+      getMassages(chatId);
+    }
   }
 
   static ChatCubit get(context) => BlocProvider.of(context);
@@ -188,7 +189,52 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(chatScreenState: ChatScreenState.voiceMassagePlayed));
   }
 
-  void selectPhotoFromCamera() async {
-    XFile? image = await ImagePickerManager.getImageFromCamera();
+  void getPhotoFromCamera() async {
+    XFile? photo = await ImagePickerManager.getImageFromCamera();
+    if (photo != null) {
+      print("Photo captured successfully path is : ${photo.path}");
+      emit(state.copyWith(
+          chatScreenState: ChatScreenState.getPhotoSuccess, photo: photo));
+    } else {
+      print("Photo capture canceled");
+      emit(state.copyWith(chatScreenState: ChatScreenState.getPhotoCanceled));
+    }
+  }
+
+  void selectPhotoFromGallery() async {
+    XFile? photo = await ImagePickerManager.getImageFromGallery();
+    if (photo != null) {
+      print("Photo captured successfully path is : ${photo.path}");
+      emit(state.copyWith(
+          chatScreenState: ChatScreenState.getPhotoSuccess, photo: photo));
+    } else {
+      print("Photo capture canceled");
+      emit(state.copyWith(chatScreenState: ChatScreenState.getPhotoCanceled));
+    }
+  }
+
+  void sendPhoto(String chatId, String imagePath, String userId) async {
+    emit(state.copyWith(
+      chatScreenState: ChatScreenState.sendMassageLoading,
+    ));
+    File imageFile = File(imagePath);
+    var response =
+        await FirebaseManager.uploadFileOnFirebase(imagePath, imageFile);
+    response.fold(
+      (l) {
+        FirebaseManager.sendMassage(MassageModel(
+            chatId: chatId,
+            content: massageController.text,
+            imageLink: l,
+            senderId: userId,
+            sendTime: DateTime.now().microsecondsSinceEpoch,
+            senderName: state.currentUser?.name));
+        massageController.clear();
+        emit(state.copyWith(
+            chatScreenState: ChatScreenState.sendMassageSuccess,
+            massageIsEmpty: true));
+      },
+      (r) {},
+    );
   }
 }

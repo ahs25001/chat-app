@@ -1,7 +1,6 @@
 import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
-import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -15,8 +14,8 @@ import '../sheard/styles/styles.dart';
 import 'chat_body.dart';
 import 'join_to_chat_body.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-class ChatScreen extends StatelessWidget {
 
+class ChatScreen extends StatelessWidget {
   const ChatScreen({super.key});
 
   @override
@@ -25,7 +24,8 @@ class ChatScreen extends StatelessWidget {
         ModalRoute.of(context)!.settings.arguments as ChatModel;
 
     return BlocProvider(
-      create: (context) => ChatCubit(chatModel.id ?? "")..getCurrentUser(),
+      create: (context) =>
+          ChatCubit(chatId: chatModel.id ?? "")..getCurrentUser(),
       child: BlocConsumer<ChatCubit, ChatState>(
         listener: (context, state) {
           if (state.chatScreenState == ChatScreenState.leaveChatSuccess) {
@@ -85,7 +85,8 @@ class ChatScreen extends StatelessWidget {
                                       PopupMenuItem(
                                         value: 0,
                                         child: Text(
-                                          AppLocalizations.of(context)!.leaveChat,
+                                          AppLocalizations.of(context)!
+                                              .leaveChat,
                                           style: menuItemStyle,
                                         ),
                                       )
@@ -116,7 +117,7 @@ class ChatScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                      ).animate().scale(duration: 300.ms,delay: 300.ms)
+                      ).animate().scale(duration: 300.ms, delay: 300.ms)
                     ],
                   ),
                 )

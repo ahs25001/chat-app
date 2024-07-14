@@ -1,0 +1,1 @@
+String baseUrl = "blurhash.woltapp.com";

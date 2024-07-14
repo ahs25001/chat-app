@@ -1,15 +1,13 @@
 import 'package:chat_app/cubits/app_cubit/app_cubit.dart';
-import 'package:chat_app/sheard/network/local/audio/audio_manager.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
+import 'package:chat_app/sheard/widgets/photo_massage.dart';
 import 'package:chat_app/sheard/widgets/voice_massage_widget.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
-import 'package:voice_message_package/voice_message_package.dart';
-
 import '../../models/massage_model.dart';
 
 class MassageItem extends StatefulWidget {
@@ -55,7 +53,8 @@ class _MassageItemState extends State<MassageItem> {
                        massageModel: widget.massageModel,
                           fromMe: fromMe,
                         )
-                      : Container(
+                      :((widget.massageModel?.imageLink != null)? PhotoMassage(  massageModel: widget.massageModel,
+                    fromMe: fromMe,): Container(
                           padding: EdgeInsets.symmetric(
                               vertical: 18.h, horizontal: 20.w),
                           decoration: BoxDecoration(
@@ -84,7 +83,7 @@ class _MassageItemState extends State<MassageItem> {
                               style: fromMe
                                   ? sandMassageStyle
                                   : receivedMassageStyle),
-                        ),
+                        )),
                 );
               },
             ),

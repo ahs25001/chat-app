@@ -19,6 +19,8 @@ enum ChatScreenState {
   voiceMassagePaused,
   voiceMassageError,
   voiceMassageComplete,
+  getPhotoSuccess,
+  getPhotoCanceled,
 }
 
 @immutable
@@ -30,11 +32,13 @@ class ChatState {
   MassageModel? playedMassage;
   bool? massageIsEmpty;
   QuerySnapshot<MassageModel>? massagesSnapshot;
+  XFile? photo;
 
   ChatState(
       {this.chatScreenState,
       this.currentUser,
       this.massageIsEmpty,
+      this.photo,
       this.currentVoicePositionInSeconds,
       this.massagesSnapshot,
       this.playedMassage,
@@ -44,11 +48,13 @@ class ChatState {
       {ChatScreenState? chatScreenState,
       bool? massageIsEmpty,
       String? massage,
+      XFile? photo,
       num? currentVoicePositionInSeconds,
       MassageModel? playedMassage,
       UserModel? currentUser,
       QuerySnapshot<MassageModel>? massagesSnapshot}) {
     return ChatState(
+        photo: photo ?? this.photo,
         playedMassage: playedMassage ?? this.playedMassage,
         massageIsEmpty: massageIsEmpty ?? this.massageIsEmpty,
         massage: massage ?? this.massage,
