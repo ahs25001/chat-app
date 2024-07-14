@@ -34,37 +34,49 @@ class ChatCubit extends Cubit<ChatState> {
     emit(state.copyWith(
       chatScreenState: ChatScreenState.sendMassageLoading,
     ));
-    FirebaseManager.sendMassage(MassageModel(
+    var response = FirebaseManager.sendMassage(MassageModel(
         chatId: chatId,
         content: massageController.text,
         senderId: state.currentUser?.id,
         sendTime: DateTime.now().microsecondsSinceEpoch,
         senderName: state.currentUser?.name));
-    massageController.clear();
-    scrollController.animateTo(scrollController.position.minScrollExtent,
-        duration: const Duration(milliseconds: 500), curve: Curves.linear);
-    emit(state.copyWith(
-        chatScreenState: ChatScreenState.sendMassageSuccess,
-        massageIsEmpty: true));
+    response.fold(
+      (l) {
+        massageController.clear();
+        scrollController.animateTo(scrollController.position.minScrollExtent,
+            duration: const Duration(milliseconds: 500), curve: Curves.linear);
+        emit(state.copyWith(
+            chatScreenState: ChatScreenState.sendMassageSuccess,
+            massageIsEmpty: true));
+      },
+      (r) {
+        emit(state.copyWith(
+          chatScreenState: ChatScreenState.sendMassageError,
+        ));
+      },
+    );
   }
 
   void getMassages(String chatId) {
     emit(state.copyWith(chatScreenState: ChatScreenState.getMassageLoading));
-    try {
-      Stream<QuerySnapshot<MassageModel>> streamData =
-          FirebaseManager.getMassages(chatId);
-      streamData.listen(
-        (event) {
-          if (!isClosed) {
-            emit(state.copyWith(
-                massagesSnapshot: event,
-                chatScreenState: ChatScreenState.getMassagesSuccess));
-          }
-        },
-      );
-    } catch (e) {
-      emit(state.copyWith(massage: e.toString()));
-    }
+
+    var response = FirebaseManager.getMassages(chatId);
+    response.fold(
+      (streamData) {
+        streamData.listen(
+          (event) {
+            if (!isClosed) {
+              emit(state.copyWith(
+                  massagesSnapshot: event,
+                  chatScreenState: ChatScreenState.getMassagesSuccess));
+            }
+          },
+        );
+      },
+      (r) {
+        emit(state.copyWith(massage: r.massage));
+      },
+    );
   }
 
   void sendVoiceMassage(String chatId) async {
@@ -81,26 +93,36 @@ class ChatCubit extends Cubit<ChatState> {
         var durationResponse = await AudioManager.getDuration(link);
         durationResponse.fold(
           (duration) {
-            FirebaseManager.sendMassage(MassageModel(
+            var sendMassageResponse = FirebaseManager.sendMassage(MassageModel(
                 chatId: chatId,
                 voiceLink: link,
                 senderId: state.currentUser?.id,
                 durationInSecond: duration?.inSeconds ?? 0,
                 sendTime: DateTime.now().microsecondsSinceEpoch,
                 senderName: state.currentUser?.name));
-            scrollController.animateTo(
-                scrollController.position.minScrollExtent,
-                duration: const Duration(milliseconds: 500),
-                curve: Curves.linear);
-            emit(state.copyWith(
-                chatScreenState: ChatScreenState.sendMassageSuccess,
-                massageIsEmpty: true));
+            sendMassageResponse.fold(
+              (l) {
+                scrollController.animateTo(
+                    scrollController.position.minScrollExtent,
+                    duration: const Duration(milliseconds: 500),
+                    curve: Curves.linear);
+                emit(state.copyWith(
+                    chatScreenState: ChatScreenState.sendMassageSuccess,
+                    massageIsEmpty: true));
+              },
+              (r) {
+                emit(state.copyWith(
+                  chatScreenState: ChatScreenState.sendMassageError,
+                  massage: r.massage,
+                ));
+              },
+            );
           },
           (r) {
             emit(state.copyWith(
-                chatScreenState: ChatScreenState.sendMassageError,
-                massage: r.massage,
-                massageIsEmpty: true));
+              chatScreenState: ChatScreenState.sendMassageError,
+              massage: r.massage,
+            ));
           },
         );
       },
@@ -117,17 +139,21 @@ class ChatCubit extends Cubit<ChatState> {
     RecordManager.startRecord();
   }
 
-  void joinToChat(ChatModel? chatModel, UserModel? user) {
-    try {
-      emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatLoading));
-      chatModel?.users?.add(user);
-      FirebaseManager.updateChat(chatModel);
-      emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatSuccess));
-    } catch (e) {
-      emit(state.copyWith(
-          chatScreenState: ChatScreenState.joinToChatError,
-          massage: e.toString()));
-    }
+  void joinToChat(ChatModel? chatModel, UserModel? user) async {
+    emit(state.copyWith(chatScreenState: ChatScreenState.joinToChatLoading));
+    chatModel?.users?.add(user);
+    var response = await FirebaseManager.updateChat(chatModel);
+    response.fold(
+      (l) {
+        emit(
+            state.copyWith(chatScreenState: ChatScreenState.joinToChatSuccess));
+      },
+      (r) {
+        emit(state.copyWith(
+            chatScreenState: ChatScreenState.joinToChatError,
+            massage: r.massage));
+      },
+    );
   }
 
   void leaveChat(ChatModel? chatModel) {
@@ -144,11 +170,20 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   void getCurrentUser() async {
-    UserModel? currentUser = await FirebaseManager.getUserById(
+    var response = await FirebaseManager.getUserById(
         FirebaseAuth.instance.currentUser?.uid ?? "");
-    if (!isClosed) {
-      emit(state.copyWith(currentUser: currentUser));
-    }
+    response.fold(
+      (currentUser) {
+        if (!isClosed) {
+          emit(state.copyWith(currentUser: currentUser));
+        }
+      },
+      (r) {
+        if (!isClosed) {
+          emit(state.copyWith(massage: r.massage));
+        }
+      },
+    );
   }
 
   void setMassageOption(String? value) {
@@ -222,19 +257,34 @@ class ChatCubit extends Cubit<ChatState> {
         await FirebaseManager.uploadFileOnFirebase(imagePath, imageFile);
     response.fold(
       (l) {
-        FirebaseManager.sendMassage(MassageModel(
+        var sendMassageResponse = FirebaseManager.sendMassage(MassageModel(
             chatId: chatId,
             content: massageController.text,
             imageLink: l,
             senderId: userId,
             sendTime: DateTime.now().microsecondsSinceEpoch,
             senderName: state.currentUser?.name));
-        massageController.clear();
-        emit(state.copyWith(
-            chatScreenState: ChatScreenState.sendMassageSuccess,
-            massageIsEmpty: true));
+        response.fold(
+          (l) {
+            massageController.clear();
+            emit(state.copyWith(
+                chatScreenState: ChatScreenState.sendMassageSuccess,
+                massageIsEmpty: true));
+          },
+          (r) {
+            emit(state.copyWith(
+              chatScreenState: ChatScreenState.sendMassageError,
+              massage: r.massage,
+            ));
+          },
+        );
       },
-      (r) {},
+      (r) {
+        emit(state.copyWith(
+          chatScreenState: ChatScreenState.sendMassageError,
+          massage: r.massage,
+        ));
+      },
     );
   }
 }

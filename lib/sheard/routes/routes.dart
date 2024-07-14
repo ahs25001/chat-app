@@ -9,6 +9,7 @@ import 'package:chat_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../../screens/settings_screen.dart';
+import '../widgets/show_photo.dart';
 
 class AppRoutes {
   static const String chatScreen = "chat screen";
@@ -18,6 +19,7 @@ class AppRoutes {
   static const String settingsScreen = "settings screen";
   static const String signUpScreen = "signUp screen";
   static const String createChatScreen = "create chat screen";
+  static const String showPhotoScreen = "show photo screen";
   static const String sendPhotoScreen = "send photo screen";
   static const String splashScreen = "/";
 }
@@ -186,6 +188,29 @@ class Routes {
           },
           pageBuilder: (context, animation, secondaryAnimation) =>
               const SettingsScreen(),
+        );
+      case AppRoutes.showPhotoScreen :
+        return PageRouteBuilder(
+          settings: settings,
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              ShowPhoto(),
+          transitionsBuilder:
+              (context, animation, secondaryAnimation, child) {
+            var begin = Offset.zero;
+            var end = Offset.zero;
+            var curve = Curves.ease;
+
+            var tween = Tween(begin: begin, end: end)
+                .chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+          transitionDuration:
+          Duration(milliseconds: 500), // Adjust the duration here
         );
       default:
         return MaterialPageRoute(

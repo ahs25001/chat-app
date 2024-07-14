@@ -1,7 +1,6 @@
 import 'package:chat_app/cubits/login_cubit/login_cubit.dart';
 import 'package:chat_app/generated/assets.dart';
-import 'package:chat_app/screens/home_screen.dart';
-import 'package:chat_app/screens/sign_up_screen.dart';
+import 'package:chat_app/sheard/constants/widgets.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
@@ -27,18 +26,7 @@ class LoginScreen extends StatelessWidget {
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: (context, state) {
           if (state.loginScreenState == LoginScreenState.loginLoading) {
-            showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => AlertDialog(
-                backgroundColor: Colors.transparent,
-                content: Center(
-                  child: CircularProgressIndicator(
-                    color: primaryColor,
-                  ),
-                ),
-              ),
-            );
+            doLoading(context);
           } else if (state.loginScreenState == LoginScreenState.loginSuccess) {
             Navigator.pop(context);
             Navigator.pushNamedAndRemoveUntil(
@@ -48,13 +36,8 @@ class LoginScreen extends StatelessWidget {
             );
           } else if (state.loginScreenState == LoginScreenState.loginError) {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                state.massage ?? "",
-                style: registerTextStyle.copyWith(color: Colors.white),
-              ),
-              backgroundColor: Colors.red,
-            ));
+           showErrorSnackBar(context: context, text: state.massage??"");
+
           }
         },
         builder: (context, state) {

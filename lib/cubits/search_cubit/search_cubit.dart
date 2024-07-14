@@ -18,20 +18,25 @@ class SearchCubit extends Cubit<SearchState> {
 
   void searchInChats() async {
     emit(state.copyWith(searchScreenState: SearchScreenState.gitChatsLoading));
-    try {
-      QuerySnapshot<ChatModel> response =
+
+     var response =
           await FirebaseManager.searchInChats(searchController.text);
-      List<ChatModel> chats = response.docs
-          .map(
-            (doc) => doc.data(),
-          )
-          .toList();
-      emit(state.copyWith(
-          searchScreenState: SearchScreenState.gitChatsSuccess, chats: chats));
-    } catch (e) {
-      emit(state.copyWith(
-          searchScreenState: SearchScreenState.gitChatsError,
-          massage: e.toString()));
-    }
+     response.fold((l) {
+       List<ChatModel> chats = l.docs
+           .map(
+             (doc) => doc.data(),
+       )
+           .toList();
+       emit(state.copyWith(
+           searchScreenState: SearchScreenState.gitChatsSuccess, chats: chats));
+     }, (r) {
+       emit(state.copyWith(
+           searchScreenState: SearchScreenState.gitChatsError,
+           massage: r.massage));
+     },);
+
+
+
+
   }
 }

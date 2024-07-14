@@ -25,15 +25,16 @@ class LoginCubit extends Cubit<LoginState> {
 
   void login() async {
     emit(state.copyWith(loginScreenState: LoginScreenState.loginLoading));
-    FirebaseErrors? response = await FirebaseManager.login(
+    var response = await FirebaseManager.login(
         emailController.text, passwordController.text);
-    if (response == null) {
+    response.fold((l) {
       emit(state.copyWith(loginScreenState: LoginScreenState.loginSuccess));
-    } else {
+
+    }, (r) {
       emit(state.copyWith(
           loginScreenState: LoginScreenState.loginError,
-          massage: response.massage));
-    }
+          massage: r.massage));
+    },);
   }
 
   void reSendEmailVerification() async {

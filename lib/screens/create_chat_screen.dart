@@ -1,5 +1,4 @@
 import 'package:chat_app/cubits/create_chat_cubit/create_chat_cubit.dart';
-import 'package:chat_app/screens/home_screen.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -8,9 +7,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../generated/assets.dart';
+import '../sheard/constants/widgets.dart';
 import '../sheard/styles/styles.dart';
 import '../sheard/widgets/create_chat_field.dart';
-import '../sheard/widgets/loading.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CreateChatScreen extends StatelessWidget {
@@ -29,10 +28,7 @@ class CreateChatScreen extends StatelessWidget {
           } else if (state.chatScreenState ==
               CreateChatScreenState.createChatSuccess) {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                backgroundColor: Colors.green,
-                content: Text(AppLocalizations.of(context)!.chatCreatedSuccess,
-                    style: registerTextStyle.copyWith(color: Colors.white))));
+            showSuccessSnackBar(context: context, text: AppLocalizations.of(context)!.chatCreatedSuccess);
             Navigator.of(context).pushNamedAndRemoveUntil(
               AppRoutes.homeScreen,
               (route) => false,
@@ -40,13 +36,7 @@ class CreateChatScreen extends StatelessWidget {
           } else if (state.chatScreenState ==
               CreateChatScreenState.createChatError) {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                state.errorMassage ?? "",
-                style: registerTextStyle.copyWith(color: Colors.white),
-              ),
-              backgroundColor: Colors.red,
-            ));
+            showErrorSnackBar(context: context, text: state.errorMassage ?? "");
           }
         },
         builder: (context, state) => Form(

@@ -22,7 +22,6 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     ChatModel chatModel =
         ModalRoute.of(context)!.settings.arguments as ChatModel;
-
     return BlocProvider(
       create: (context) =>
           ChatCubit(chatId: chatModel.id ?? "")..getCurrentUser(),

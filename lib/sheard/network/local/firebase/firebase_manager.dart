@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import 'package:chat_app/models/chat_model.dart';
 import 'package:chat_app/models/user_model.dart';
@@ -22,28 +23,49 @@ class FirebaseManager {
         );
   }
 
-  static void addChat(ChatModel chat) {
-    CollectionReference<ChatModel> collection = getChatCollection();
-    DocumentReference<ChatModel> docRef = collection.doc();
-    chat.id = docRef.id;
-    docRef.set(chat);
+  static Either<void, FirebaseErrors> addChat(ChatModel chat) {
+    try {
+      CollectionReference<ChatModel> collection = getChatCollection();
+      DocumentReference<ChatModel> docRef = collection.doc();
+      chat.id = docRef.id;
+      docRef.set(chat);
+      return Left(() {});
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
-  static Stream<QuerySnapshot<ChatModel>> getChats() {
-    return getChatCollection().snapshots();
+  static Either<Stream<QuerySnapshot<ChatModel>>, FirebaseErrors> getChats() {
+    try {
+      return Left(getChatCollection().snapshots());
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
-  static void updateChat(ChatModel? newChatModel) async {
-    await getChatCollection()
-        .doc(newChatModel?.id)
-        .update(newChatModel?.toJson() ?? {});
+  static Future<Either<void, FirebaseErrors>> updateChat(
+      ChatModel? newChatModel) async {
+    try {
+      await getChatCollection()
+          .doc(newChatModel?.id)
+          .update(newChatModel?.toJson() ?? {});
+      return Left(() {});
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
-  static Future<QuerySnapshot<ChatModel>> searchInChats(String name) async {
-    return await getChatCollection()
-        .where('title', isGreaterThanOrEqualTo: name)
-        .where('title', isLessThanOrEqualTo: '$name\uf7ff')
-        .get();
+  static Future<Either<QuerySnapshot<ChatModel>, FirebaseErrors>> searchInChats(
+      String name) async {
+    try {
+      var result = await getChatCollection()
+          .where('title', isGreaterThanOrEqualTo: name)
+          .where('title', isLessThanOrEqualTo: '$name\uf7ff')
+          .get();
+      return Left(result);
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
   ///massages operations
@@ -57,25 +79,37 @@ class FirebaseManager {
         );
   }
 
-  static Stream<QuerySnapshot<MassageModel>> getMassages(String chatId) {
-    return getMassageCollection()
-        .orderBy("sendTime", descending: true)
-        .where("chatId", isEqualTo: chatId)
-        .snapshots();
+  static Either<Stream<QuerySnapshot<MassageModel>>, FirebaseErrors>
+      getMassages(String chatId) {
+    try {
+      return Left(getMassageCollection()
+          .orderBy("sendTime", descending: true)
+          .where("chatId", isEqualTo: chatId)
+          .snapshots());
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
-  static void sendMassage(MassageModel massage) {
-    DocumentReference<MassageModel> docRef = getMassageCollection().doc();
-    massage.id = docRef.id;
-    docRef.set(massage);
+  static Either<void, FirebaseErrors> sendMassage(MassageModel massage) {
+    try {
+      DocumentReference<MassageModel> docRef = getMassageCollection().doc();
+      massage.id = docRef.id;
+      docRef.set(massage);
+      return Left(() {});
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
   static Future<Either<String, FirebaseErrors>> uploadFileOnFirebase(
       String path, File file) async {
     try {
       UploadTask task =
-      FirebaseStorage.instance.ref().child(path).putFile(file);
-      var snapShot = await task.whenComplete(() {},);
+          FirebaseStorage.instance.ref().child(path).putFile(file);
+      var snapShot = await task.whenComplete(
+        () {},
+      );
       return Left(await snapShot.ref.getDownloadURL());
     } catch (e) {
       return Right(FirebaseErrors(e.toString()));
@@ -83,7 +117,7 @@ class FirebaseManager {
   }
 
   ///user operations
-  static Future<FirebaseErrors?> createAccount(
+  static Future<Either<void, FirebaseErrors>> createAccount(
       String emailAddress, String password) async {
     try {
       final credential =
@@ -92,30 +126,32 @@ class FirebaseManager {
         password: password,
       );
       credential.user?.sendEmailVerification();
+      return Left(() {});
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        return FirebaseErrors('The password provided is too weak.');
+        return Right(FirebaseErrors('The password provided is too weak.'));
       } else if (e.code == 'email-already-in-use') {
-        return FirebaseErrors('The account already exists for that email.');
+        return Right(
+            FirebaseErrors('The account already exists for that email.'));
       }
+      return Right(FirebaseErrors(e.toString()));
     } catch (e) {
-      return FirebaseErrors(e.toString());
+      return Right(FirebaseErrors(e.toString()));
     }
-    return null;
   }
 
-  static Future<FirebaseErrors?> login(
+  static Future<Either<void, FirebaseErrors>> login(
       String emailAddress, String password) async {
     try {
       final credential = await FirebaseAuth.instance
           .signInWithEmailAndPassword(email: emailAddress, password: password);
       if (!(credential.user!.emailVerified)) {
-        return FirebaseErrors('Pleas verify your email.');
+        return Right(FirebaseErrors('Pleas verify your email.'));
       }
+      return Left(() {});
     } on FirebaseAuthException catch (_) {
-      return FirebaseErrors('Wrong password or email.');
+      return Right(FirebaseErrors('Wrong password or email.'));
     }
-    return null;
   }
 
   static CollectionReference<UserModel> getUserCollection() {
@@ -128,16 +164,26 @@ class FirebaseManager {
         );
   }
 
-  static Future<UserModel?> getUserById(String userId) async {
-    DocumentSnapshot<UserModel> userSnapshot =
-        await getUserCollection().doc(userId).get();
-    return userSnapshot.data();
+  static Future<Either<UserModel?, FirebaseErrors>> getUserById(
+      String userId) async {
+    try {
+      DocumentSnapshot<UserModel> userSnapshot =
+          await getUserCollection().doc(userId).get();
+      return Left(userSnapshot.data());
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
-  static void addUser(UserModel user) {
-    CollectionReference<UserModel> collection = getUserCollection();
-    DocumentReference<UserModel> docRef = collection.doc(user.id);
-    docRef.set(user);
+  static Either<void, FirebaseErrors> addUser(UserModel user) {
+    try {
+      CollectionReference<UserModel> collection = getUserCollection();
+      DocumentReference<UserModel> docRef = collection.doc(user.id);
+      docRef.set(user);
+      return Left(() {});
+    } catch (e) {
+      return Right(FirebaseErrors(e.toString()));
+    }
   }
 
   static Future<Either<void, FirebaseErrors>> signOut() async {
@@ -147,5 +193,4 @@ class FirebaseManager {
       return Right(FirebaseErrors(e.toString()));
     }
   }
-
 }

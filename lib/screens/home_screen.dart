@@ -1,8 +1,6 @@
 import 'package:chat_app/cubits/home_cubit/home_cubit.dart';
 import 'package:chat_app/screens/browse_tab.dart';
-import 'package:chat_app/screens/create_chat_screen.dart';
 import 'package:chat_app/screens/my_rooms_tab.dart';
-import 'package:chat_app/screens/search_screen.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../generated/assets.dart';
+import '../sheard/constants/widgets.dart';
 import '../sheard/styles/styles.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,7 +23,9 @@ class HomeScreen extends StatelessWidget {
       create: (context) => HomeCubit(),
       child: BlocConsumer<HomeCubit, HomeState>(
         listener: (context, state) {
-          // TODO: implement listener
+          if (state.homeScreenState == HomeScreenState.getChatsError) {
+            showErrorSnackBar(context: context, text: state.errorMassage ?? "");
+          }
         },
         builder: (context, state) {
           return DefaultTabController(

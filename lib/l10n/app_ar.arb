@@ -35,5 +35,9 @@
   "english": "الانجليزية",
   "language": "اللغة",
   "editeProfile": "تعديل الملف الشخصي",
-  "signOut": "تسجيل الخروج"
+  "signOut": "تسجيل الخروج",
+  "pleasVerifyYourEmail":"يرجى التحقق من البريد الاكتروني",
+  "wrongPasswordOrMail": "كلمة المرور او البريد الاكتروني غير صحيح"
+
+
 }

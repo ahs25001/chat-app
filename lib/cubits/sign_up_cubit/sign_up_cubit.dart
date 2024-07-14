@@ -26,24 +26,37 @@ class SignUpCubit extends Cubit<SignUpState> {
   void signUp() async {
     emit(state.copyWith(
         signUpScreenState: SignUpScreenState.accountCreatedLoading));
-    FirebaseErrors? response = await FirebaseManager.createAccount(
+    var response = await FirebaseManager.createAccount(
         emailController.text, passwordController.text);
-    if (response == null) {
-      emit(state.copyWith(
-          signUpScreenState: SignUpScreenState.accountCreatedSuccess));
-    } else {
-      emit(state.copyWith(
-          signUpScreenState: SignUpScreenState.accountCreatedError,
-          errorMassage: response.massage));
-    }
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+            signUpScreenState: SignUpScreenState.accountCreatedSuccess));
+      },
+      (r) {
+        emit(state.copyWith(
+            signUpScreenState: SignUpScreenState.accountCreatedError,
+            errorMassage: r.massage));
+      },
+    );
   }
 
   void addUser() {
     emit(state.copyWith(signUpScreenState: SignUpScreenState.addUserLoading));
-    FirebaseManager.addUser(UserModel(
+    var response = FirebaseManager.addUser(UserModel(
         name: nameController.text,
         email: emailController.text,
         id: FirebaseAuth.instance.currentUser?.uid));
-    emit(state.copyWith(signUpScreenState: SignUpScreenState.addUserSuccess));
+    response.fold(
+      (l) {
+        emit(state.copyWith(
+            signUpScreenState: SignUpScreenState.addUserSuccess));
+      },
+      (r) {
+        emit(state.copyWith(
+            signUpScreenState: SignUpScreenState.addUserError,
+            errorMassage: r.massage));
+      },
+    );
   }
 }

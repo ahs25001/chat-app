@@ -1,6 +1,4 @@
-import 'package:chat_app/screens/login_screen.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
-import 'package:chat_app/sheard/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -8,13 +6,14 @@ import 'package:flutter_svg/svg.dart';
 
 import '../cubits/sign_up_cubit/sign_up_cubit.dart';
 import '../generated/assets.dart';
+import '../sheard/constants/widgets.dart';
 import '../sheard/styles/colors.dart';
 import '../sheard/styles/styles.dart';
 import '../sheard/widgets/custom_field.dart';
 import '../sheard/widgets/register_button.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-class SignUpScreen extends StatelessWidget {
 
+class SignUpScreen extends StatelessWidget {
   const SignUpScreen({Key? key}) : super(key: key);
 
   @override
@@ -27,13 +26,7 @@ class SignUpScreen extends StatelessWidget {
           if (state.signUpScreenState ==
               SignUpScreenState.accountCreatedError) {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                state.errorMassage ?? "",
-                style: registerTextStyle.copyWith(color: Colors.white),
-              ),
-              backgroundColor: Colors.red,
-            ));
+           showErrorSnackBar(context: context, text: state.errorMassage??"");
           } else if (state.signUpScreenState ==
               SignUpScreenState.accountCreatedSuccess) {
             Navigator.pop(context);
@@ -41,13 +34,9 @@ class SignUpScreen extends StatelessWidget {
           } else if (state.signUpScreenState ==
               SignUpScreenState.addUserSuccess) {
             Navigator.pop(context);
-            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: Text(
-                AppLocalizations.of(context)!.accountCreatedSuccess,
-                style: registerTextStyle.copyWith(color: Colors.white),
-              ),
-              backgroundColor: Colors.green,
-            ));
+            showSuccessSnackBar(
+                context: context,
+                text: AppLocalizations.of(context)!.accountCreatedSuccess);
             Navigator.pushNamedAndRemoveUntil(
               context,
               AppRoutes.loginScreen,
@@ -88,12 +77,13 @@ class SignUpScreen extends StatelessWidget {
                               height: 248.h,
                             ),
                             CustomField(
-                              label:AppLocalizations.of(context)!.fullName,
+                              label: AppLocalizations.of(context)!.fullName,
                               controller:
                                   SignUpCubit.get(context).nameController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
+                                  return AppLocalizations.of(context)!
+                                      .thisFieldIsRequired;
                                 }
                               },
                               isPassword: false,
@@ -107,7 +97,8 @@ class SignUpScreen extends StatelessWidget {
                                   SignUpCubit.get(context).emailController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
+                                  return AppLocalizations.of(context)!
+                                      .thisFieldIsRequired;
                                 } else if (!RegExp(
                                         r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                     .hasMatch(value ?? "")) {
@@ -125,7 +116,8 @@ class SignUpScreen extends StatelessWidget {
                                   SignUpCubit.get(context).passwordController,
                               validator: (String? value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return AppLocalizations.of(context)!.thisFieldIsRequired;
+                                  return AppLocalizations.of(context)!
+                                      .thisFieldIsRequired;
                                 }
                               },
                               isPassword: true,
@@ -150,7 +142,8 @@ class SignUpScreen extends StatelessWidget {
                                   SignUpCubit.get(context).signUp();
                                 }
                               },
-                              title: AppLocalizations.of(context)!.createAccount,
+                              title:
+                                  AppLocalizations.of(context)!.createAccount,
                             ),
                           ],
                         ),

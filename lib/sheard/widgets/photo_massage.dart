@@ -1,4 +1,5 @@
 import 'package:chat_app/models/massage_model.dart';
+import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/widgets/show_photo.dart';
 import 'package:fancy_shimmer_image/fancy_shimmer_image.dart';
 import 'package:flutter/material.dart';
@@ -36,38 +37,23 @@ class PhotoMassage extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              (fromMe)
+                  ? const SizedBox()
+                  : Text(
+                      massageModel?.senderName ?? "",
+                      style: labelStyle,
+                    ),
               InkWell(
-                onTap: () => Navigator.push(
-                  context,
-                  PageRouteBuilder(
-                    pageBuilder: (context, animation, secondaryAnimation) =>
-                        ShowPhoto(massageModel),
-                    transitionsBuilder:
-                        (context, animation, secondaryAnimation, child) {
-                      var begin = Offset.zero;
-                      var end = Offset.zero;
-                      var curve = Curves.ease;
-
-                      var tween = Tween(begin: begin, end: end)
-                          .chain(CurveTween(curve: curve));
-                      var offsetAnimation = animation.drive(tween);
-
-                      return SlideTransition(
-                        position: offsetAnimation,
-                        child: child,
-                      );
-                    },
-                    transitionDuration:
-                        Duration(milliseconds: 500), // Adjust the duration here
-                  ),
-                ),
+                onTap: () => Navigator.pushNamed(
+                    context, AppRoutes.showPhotoScreen,
+                    arguments: massageModel),
                 child: Hero(
                     tag: massageModel?.imageLink ?? "",
                     child: FancyShimmerImage(
-                      imageUrl:massageModel?.imageLink ?? "" ,
+                      imageUrl: massageModel?.imageLink ?? "",
                       width: 150.w,
                       height: 200.h,
-
+                      boxFit: BoxFit.contain,
                     )),
               ),
               SizedBox(

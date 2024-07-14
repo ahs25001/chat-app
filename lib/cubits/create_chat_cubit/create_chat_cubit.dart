@@ -20,19 +20,31 @@ class CreateChatCubit extends Cubit<CreateChatState> {
   void createChat() async {
     emit(state.copyWith(
         chatScreenState: CreateChatScreenState.createChatLoading));
-    try {
-      UserModel? user = await FirebaseManager.getUserById(
-          FirebaseAuth.instance.currentUser?.uid ?? "");
-      FirebaseManager.addChat(ChatModel(
-          users: [user],
-          description: chatDescriptionController.text,
-          title: chatNameController.text));
-      emit(state.copyWith(
-          chatScreenState: CreateChatScreenState.createChatSuccess));
-    } catch (e) {
-      emit(state.copyWith(
-          chatScreenState: CreateChatScreenState.createChatError,
-          errorMassage: e.toString()));
-    }
+    var getUserResponse = await FirebaseManager.getUserById(
+        FirebaseAuth.instance.currentUser?.uid ?? "");
+    getUserResponse.fold(
+      (user) {
+        var response = FirebaseManager.addChat(ChatModel(
+            users: [user],
+            description: chatDescriptionController.text,
+            title: chatNameController.text));
+        response.fold(
+          (_) {
+            emit(state.copyWith(
+                chatScreenState: CreateChatScreenState.createChatSuccess));
+          },
+          (r) {
+            emit(state.copyWith(
+                chatScreenState: CreateChatScreenState.createChatError,
+                errorMassage: r.massage));
+          },
+        );
+      },
+      (r) {
+        emit(state.copyWith(
+            chatScreenState: CreateChatScreenState.createChatError,
+            errorMassage: r.massage));
+      },
+    );
   }
 }

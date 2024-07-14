@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/massage_model.dart';
+import 'package:chat_app/sheard/constants/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -24,9 +25,11 @@ class SendPhotoScreen extends StatelessWidget {
           if(state.chatScreenState==ChatScreenState.sendMassageSuccess){
             Navigator.pop(context);
           }
+          else if(state.chatScreenState==ChatScreenState.sendMassageError){
+            showErrorSnackBar(context: context, text: state.massage??"");
+          }
         },
         builder: (context, state) {
-          print(state.chatScreenState);
           return Scaffold(
             resizeToAvoidBottomInset: false,
             body: SafeArea(

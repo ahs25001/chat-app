@@ -1,4 +1,5 @@
 import 'package:chat_app/cubits/home_cubit/home_cubit.dart';
+import 'package:chat_app/sheard/constants/widgets.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
 import 'package:flutter/material.dart';
@@ -15,10 +16,7 @@ class MyRoomsTab extends StatelessWidget {
     ScreenUtil.init(context, designSize: const Size(375, 943));
     return BlocProvider(
       create: (context) => HomeCubit(),
-      child: BlocConsumer<HomeCubit, HomeState>(
-        listener: (context, state) {
-          // TODO: implement listener
-        },
+      child: BlocBuilder<HomeCubit, HomeState>(
         builder:(context, state) {
           if (state.homeScreenState == HomeScreenState.getChatsLoading) {
             return Center(

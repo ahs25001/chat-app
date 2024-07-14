@@ -1,5 +1,6 @@
 import 'package:chat_app/cubits/chat_cubit/chat_cubit.dart';
 import 'package:chat_app/models/chat_model.dart';
+import 'package:chat_app/sheard/constants/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -20,11 +21,8 @@ class JoinToChatBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<ChatCubit, ChatState>(
-      listener: (context, state) {
-        // TODO: implement listener
-      },
-      child: SingleChildScrollView(
+    return BlocBuilder<ChatCubit, ChatState>(
+      builder: (context, state) => SingleChildScrollView(
         child: Column(
           children: [
             Text(

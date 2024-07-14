@@ -1,4 +1,5 @@
 import 'package:chat_app/cubits/search_cubit/search_cubit.dart';
+import 'package:chat_app/sheard/constants/widgets.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
 import 'package:chat_app/sheard/widgets/search_item.dart';
@@ -14,7 +15,12 @@ class SearchScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => SearchCubit(),
-      child: BlocBuilder<SearchCubit, SearchState>(
+      child: BlocConsumer<SearchCubit, SearchState>(
+        listener: (context, state) {
+          if (state.searchScreenState == SearchScreenState.gitChatsError) {
+            showErrorSnackBar(context: context, text: state.massage ?? "");
+          }
+        },
         builder: (context, state) {
           return Scaffold(
             appBar: AppBar(

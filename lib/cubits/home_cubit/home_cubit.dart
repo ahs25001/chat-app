@@ -27,40 +27,56 @@ class HomeCubit extends Cubit<HomeState> {
         browserChats: [],
       ));
     }
+    UserModel? currentUser;
+    if (state.currentUser == null) {
+      var getUserResponse = await FirebaseManager.getUserById(
+          FirebaseAuth.instance.currentUser?.uid ?? "");
+      getUserResponse.fold(
+        (l) {
+          currentUser = l;
+        },
+        (r) {
+          emit(state.copyWith(
+              homeScreenState: HomeScreenState.getChatsError,
+              errorMassage: r.massage));
+        },
+      );
+    } else {
+      currentUser = state.currentUser;
+    }
 
-    try {
-      final currentUser = state.currentUser ??
-          await FirebaseManager.getUserById(
-              FirebaseAuth.instance.currentUser?.uid ?? "");
+    final response = FirebaseManager.getChats();
+    response.fold(
+      (streamData) async {
+        await for (final event in streamData) {
+          final allChats = event.docs.map((e) => e.data()).toList();
+          final myChats = <ChatModel>[];
+          final browserChats = <ChatModel>[];
 
-      final streamData = FirebaseManager.getChats();
-      await for (final event in streamData) {
-        final allChats = event.docs.map((e) => e.data()).toList();
-        final myChats = <ChatModel>[];
-        final browserChats = <ChatModel>[];
-
-        for (final chat in allChats) {
-          final usersIds = chat.users?.map((user) => user?.id).toList() ?? [];
-          if (usersIds.contains(currentUser?.id)) {
-            myChats.add(chat);
-          } else {
-            browserChats.add(chat);
+          for (final chat in allChats) {
+            final usersIds = chat.users?.map((user) => user?.id).toList() ?? [];
+            if (usersIds.contains(currentUser?.id)) {
+              myChats.add(chat);
+            } else {
+              browserChats.add(chat);
+            }
+          }
+          if (!isClosed) {
+            emit(state.copyWith(
+              homeScreenState: HomeScreenState.getChatsSuccess,
+              currentUser: currentUser,
+              browserChats: browserChats,
+              myChats: myChats,
+              allChats: allChats,
+            ));
           }
         }
+      },
+      (r) {
         if (!isClosed) {
-          emit(state.copyWith(
-            homeScreenState: HomeScreenState.getChatsSuccess,
-            currentUser: currentUser,
-            browserChats: browserChats,
-            myChats: myChats,
-            allChats: allChats,
-          ));
+          emit(state.copyWith(homeScreenState: HomeScreenState.getChatsError));
         }
-      }
-    } catch (e) {
-      if (!isClosed) {
-        emit(state.copyWith(homeScreenState: HomeScreenState.getChatsError));
-      }
-    }
+      },
+    );
   }
 }

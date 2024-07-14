@@ -2,7 +2,6 @@ import 'package:chat_app/cubits/app_cubit/app_cubit.dart';
 import 'package:chat_app/sheard/routes/routes.dart';
 import 'package:chat_app/sheard/styles/colors.dart';
 import 'package:chat_app/sheard/styles/styles.dart';
-import 'package:chat_app/sheard/widgets/loading.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:lottie/lottie.dart';
 
 import '../generated/assets.dart';
+import '../sheard/constants/widgets.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({Key? key}) : super(key: key);

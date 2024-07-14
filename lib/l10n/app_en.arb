@@ -35,7 +35,8 @@
   "english": "English",
   "language": "Language",
   "editeProfile": "Edite Profile",
-  "signOut": "Sign Out"
-
+  "signOut": "Sign Out",
+  "pleasVerifyYourEmail":"Pleas verify your email.",
+  "wrongPasswordOrMail": "Wrong password or email."
 
 }

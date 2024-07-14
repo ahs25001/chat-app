@@ -10,8 +10,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../cubits/app_cubit/app_cubit.dart';
+import '../sheard/constants/widgets.dart';
 import '../sheard/network/local/record/record_manager.dart';
-import '../sheard/routes/routes.dart';
 import '../sheard/widgets/massage_item.dart';
 import '../sheard/widgets/select_image_source_dialog.dart';
 
@@ -45,7 +45,15 @@ class _ChatBodyState extends State<ChatBody> {
       buildWhen: (previous, current) {
         return current.chatScreenState == ChatScreenState.getMassagesSuccess;
       },
-      listener: (context, state) {},
+      listener: (context, state) {
+        if (state.chatScreenState == ChatScreenState.sendMassageError ||
+            state.chatScreenState == ChatScreenState.joinToChatError ||
+            state.chatScreenState == ChatScreenState.leaveChatError ||
+            state.chatScreenState == ChatScreenState.getMassagesError ||
+            state.chatScreenState == ChatScreenState.voiceMassageError) {
+          showErrorSnackBar(context: context, text: state.massage ?? "");
+        }
+      },
       builder: (context, state) {
         List<MassageModel>? massages =
             state.massagesSnapshot?.docs.map((doc) => doc.data()).toList();
