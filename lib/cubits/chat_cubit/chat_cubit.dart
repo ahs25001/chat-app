@@ -136,6 +136,7 @@ class ChatCubit extends Cubit<ChatState> {
   }
 
   void startRecord() {
+    emit(state.copyWith(chatScreenState: ChatScreenState.recordingStarted));
     RecordManager.startRecord();
   }
 

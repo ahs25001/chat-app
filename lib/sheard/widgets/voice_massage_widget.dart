@@ -39,25 +39,33 @@ class VoiceMassageWidget extends StatelessWidget {
                       ChatCubit.get(context).playMassage(massageModel);
                     }
                   },
-                  child: (state.chatScreenState ==
-                              ChatScreenState.voiceMassageLoading &&
+                  child: ((massageModel?.durationInSecond ?? 0) < 1 &&
                           state.playedMassage?.id == massageModel?.id)
-                      ? SizedBox(
-                          height: 35.h,
-                          width: 35.w,
-                          child: CircularProgressIndicator(
-                            color: fromMe ? Colors.white : Colors.black,
-                          ),
-                        )
-                      : Icon(
-                          (state.chatScreenState ==
-                                      ChatScreenState.voiceMassagePlayed &&
-                                  state.playedMassage?.id == massageModel?.id)
-                              ? Icons.pause
-                              : Icons.play_arrow,
+                      ? Icon(
+                          Icons.close,
                           color: fromMe ? Colors.white : Colors.black,
                           size: 30.sp,
-                        ),
+                        )
+                      : (state.chatScreenState ==
+                                  ChatScreenState.voiceMassageLoading &&
+                              state.playedMassage?.id == massageModel?.id)
+                          ? SizedBox(
+                              height: 35.h,
+                              width: 35.w,
+                              child: CircularProgressIndicator(
+                                color: fromMe ? Colors.white : Colors.black,
+                              ),
+                            )
+                          : Icon(
+                              (state.chatScreenState ==
+                                          ChatScreenState.voiceMassagePlayed &&
+                                      state.playedMassage?.id ==
+                                          massageModel?.id)
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
+                              color: fromMe ? Colors.white : Colors.black,
+                              size: 30.sp,
+                            ),
                 ),
                 SizedBox(
                   width: 150.w,

@@ -82,90 +82,147 @@ class _ChatBodyState extends State<ChatBody> {
                     Expanded(
                       child: BlocBuilder<AppCubit, AppState>(
                         builder: (context, appState) {
-                          return TextFormField(
-                            onChanged: (value) {
-                              ChatCubit.get(context).setMassageOption(value);
+                          return AnimatedSwitcher(
+                            duration: 500.ms,
+                            transitionBuilder: (child, animation) {
+                              var begin = Offset(0, 1);
+                              var end = Offset.zero;
+                              var curve = Curves.ease;
+
+                              var tween = Tween(begin: begin, end: end)
+                                  .chain(CurveTween(curve: curve));
+                              var offsetAnimation = animation.drive(tween);
+
+                              return SlideTransition(
+                                position: offsetAnimation,
+                                child: child,
+                              );
                             },
-                            cursorColor: primaryColor,
-                            controller:
-                                ChatCubit.get(context).massageController,
-                            maxLines: 10,
-                            minLines: 1,
-                            style:
-                                registerTextStyle.copyWith(color: Colors.black),
-                            decoration: InputDecoration(
-                                suffixIcon: AnimatedSwitcher(
-                                  transitionBuilder: (child, animation) {
-                                    return ScaleTransition(
-                                      scale: animation,
-                                      child: child,
-                                    );
-                                  },
-                                  duration: 200.ms,
-                                  child: (ChatCubit.get(context)
-                                              .state
-                                              .massageIsEmpty ??
-                                          true)
-                                      ? InkWell(
-                                          onTap: () {
-                                            showDialog(
-                                              context: context,
-                                              builder: (context) {
-                                                return SelectImageSourceDialog(
-                                                  userId: state
-                                                          .currentUser
-                                                          ?.id ??
-                                                      "",
-                                                  chatId:
-                                                      widget.chatModel.id ?? "",
-                                                );
-                                              },
+                            child: (state.chatScreenState ==
+                                    ChatScreenState.recordingStarted)
+                                ? Container(
+                              padding: EdgeInsets.symmetric(horizontal: 10.w,vertical: 12.h),
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.only(
+                                          topRight: (appState.localCode == "en")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                          topLeft: (appState.localCode == "ar")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                        ),
+                                        border:
+                                            Border.all(color: primaryColor)),
+                                    child: Row(
+                                      children: [
+                                        Icon(
+                                          Icons.mic,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 15.w,
+                                        ),
+                                        Text(
+                                          AppLocalizations.of(context)!
+                                              .recoding,
+                                          style: labelStyle,
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                : TextFormField(
+                                    onChanged: (value) {
+                                      ChatCubit.get(context)
+                                          .setMassageOption(value);
+                                    },
+                                    cursorColor: primaryColor,
+                                    controller: ChatCubit.get(context)
+                                        .massageController,
+                                    maxLines: 10,
+                                    minLines: 1,
+                                    style: registerTextStyle.copyWith(
+                                        color: Colors.black),
+                                    decoration: InputDecoration(
+                                        suffixIcon: AnimatedSwitcher(
+                                          transitionBuilder:
+                                              (child, animation) {
+                                            return ScaleTransition(
+                                              scale: animation,
+                                              child: child,
                                             );
                                           },
-                                          child: Icon(
-                                            key: ValueKey(ChatCubit.get(context)
-                                                .state
-                                                .massageIsEmpty),
-                                            Icons.camera,
-                                            color: primaryColor,
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                ),
-                                hintText:
-                                    AppLocalizations.of(context)!.typeAMassage,
-                                hintStyle: labelStyle,
-                                contentPadding: EdgeInsets.symmetric(
-                                    horizontal: 10.h, vertical: 5.w),
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                  topRight: (appState.localCode == "en")
-                                      ? Radius.circular(18.r)
-                                      : Radius.zero,
-                                  topLeft: (appState.localCode == "ar")
-                                      ? Radius.circular(18.r)
-                                      : Radius.zero,
-                                )),
-                                focusedBorder: OutlineInputBorder(
-                                    borderSide: BorderSide(color: primaryColor),
-                                    borderRadius: BorderRadius.only(
-                                      topRight: (appState.localCode == "en")
-                                          ? Radius.circular(18.r)
-                                          : Radius.zero,
-                                      topLeft: (appState.localCode == "ar")
-                                          ? Radius.circular(18.r)
-                                          : Radius.zero,
-                                    )),
-                                enabledBorder: OutlineInputBorder(
-                                    borderRadius: BorderRadius.only(
-                                  topRight: (appState.localCode == "en")
-                                      ? Radius.circular(18.r)
-                                      : Radius.zero,
-                                  topLeft: (appState.localCode == "ar")
-                                      ? Radius.circular(18.r)
-                                      : Radius.zero,
-                                ))),
-                            // scrollPadding: ,
+                                          duration: 200.ms,
+                                          child: (ChatCubit.get(context)
+                                                      .state
+                                                      .massageIsEmpty ??
+                                                  true)
+                                              ? InkWell(
+                                                  onTap: () {
+                                                    showDialog(
+                                                      context: context,
+                                                      builder: (context) {
+                                                        return SelectImageSourceDialog(
+                                                          userId: state
+                                                                  .currentUser
+                                                                  ?.id ??
+                                                              "",
+                                                          chatId: widget
+                                                                  .chatModel
+                                                                  .id ??
+                                                              "",
+                                                        );
+                                                      },
+                                                    );
+                                                  },
+                                                  child: Icon(
+                                                    key: ValueKey(
+                                                        ChatCubit.get(context)
+                                                            .state
+                                                            .massageIsEmpty),
+                                                    Icons.camera,
+                                                    color: primaryColor,
+                                                  ),
+                                                )
+                                              : const SizedBox(),
+                                        ),
+                                        hintText: AppLocalizations.of(context)!
+                                            .typeAMassage,
+                                        hintStyle: labelStyle,
+                                        contentPadding: EdgeInsets.symmetric(
+                                            horizontal: 10.h, vertical: 5.w),
+                                        border: OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                          topRight: (appState.localCode == "en")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                          topLeft: (appState.localCode == "ar")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                        )),
+                                        focusedBorder: OutlineInputBorder(
+                                            borderSide:
+                                                BorderSide(color: primaryColor),
+                                            borderRadius: BorderRadius.only(
+                                              topRight:
+                                                  (appState.localCode == "en")
+                                                      ? Radius.circular(18.r)
+                                                      : Radius.zero,
+                                              topLeft:
+                                                  (appState.localCode == "ar")
+                                                      ? Radius.circular(18.r)
+                                                      : Radius.zero,
+                                            )),
+                                        enabledBorder: OutlineInputBorder(
+                                            borderRadius: BorderRadius.only(
+                                          topRight: (appState.localCode == "en")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                          topLeft: (appState.localCode == "ar")
+                                              ? Radius.circular(18.r)
+                                              : Radius.zero,
+                                        ))),
+                                    // scrollPadding: ,
+                                  ),
                           );
                         },
                       ),
@@ -237,3 +294,94 @@ class _ChatBodyState extends State<ChatBody> {
     );
   }
 }
+// Expanded(
+// child: BlocBuilder<AppCubit, AppState>(
+// builder: (context, appState) {
+// return TextFormField(
+// onChanged: (value) {
+// ChatCubit.get(context).setMassageOption(value);
+// },
+// cursorColor: primaryColor,
+// controller:
+// ChatCubit.get(context).massageController,
+// maxLines: 10,
+// minLines: 1,
+// style:
+// registerTextStyle.copyWith(color: Colors.black),
+// decoration: InputDecoration(
+// suffixIcon: AnimatedSwitcher(
+// transitionBuilder: (child, animation) {
+// return ScaleTransition(
+// scale: animation,
+// child: child,
+// );
+// },
+// duration: 200.ms,
+// child: (ChatCubit.get(context)
+//     .state
+//     .massageIsEmpty ??
+// true)
+// ? InkWell(
+// onTap: () {
+// showDialog(
+// context: context,
+// builder: (context) {
+// return SelectImageSourceDialog(
+// userId: state
+//     .currentUser
+//     ?.id ??
+// "",
+// chatId:
+// widget.chatModel.id ?? "",
+// );
+// },
+// );
+// },
+// child: Icon(
+// key: ValueKey(ChatCubit.get(context)
+//     .state
+//     .massageIsEmpty),
+// Icons.camera,
+// color: primaryColor,
+// ),
+// )
+//     : const SizedBox(),
+// ),
+// hintText:
+// AppLocalizations.of(context)!.typeAMassage,
+// hintStyle: labelStyle,
+// contentPadding: EdgeInsets.symmetric(
+// horizontal: 10.h, vertical: 5.w),
+// border: OutlineInputBorder(
+// borderRadius: BorderRadius.only(
+// topRight: (appState.localCode == "en")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// topLeft: (appState.localCode == "ar")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// )),
+// focusedBorder: OutlineInputBorder(
+// borderSide: BorderSide(color: primaryColor),
+// borderRadius: BorderRadius.only(
+// topRight: (appState.localCode == "en")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// topLeft: (appState.localCode == "ar")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// )),
+// enabledBorder: OutlineInputBorder(
+// borderRadius: BorderRadius.only(
+// topRight: (appState.localCode == "en")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// topLeft: (appState.localCode == "ar")
+// ? Radius.circular(18.r)
+//     : Radius.zero,
+// ))),
+// // scrollPadding: ,
+// );
+// },
+// ),
+// )

@@ -21,6 +21,7 @@ enum ChatScreenState {
   voiceMassageComplete,
   getPhotoSuccess,
   getPhotoCanceled,
+  recordingStarted,
 }
 
 @immutable

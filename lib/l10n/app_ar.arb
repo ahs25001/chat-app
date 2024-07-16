@@ -37,7 +37,8 @@
   "editeProfile": "تعديل الملف الشخصي",
   "signOut": "تسجيل الخروج",
   "pleasVerifyYourEmail":"يرجى التحقق من البريد الاكتروني",
-  "wrongPasswordOrMail": "كلمة المرور او البريد الاكتروني غير صحيح"
+  "wrongPasswordOrMail": "كلمة المرور او البريد الاكتروني غير صحيح",
+  "recoding": "جاري التسجيل...."
 
 
 }

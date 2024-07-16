@@ -37,6 +37,7 @@
   "editeProfile": "Edite Profile",
   "signOut": "Sign Out",
   "pleasVerifyYourEmail":"Pleas verify your email.",
-  "wrongPasswordOrMail": "Wrong password or email."
+  "wrongPasswordOrMail": "Wrong password or email.",
+  "recoding": "Recording..."
 
 }
